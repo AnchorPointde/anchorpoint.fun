@@ -3,216 +3,426 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AnchorPoint Groundz</title>
+    <title>AnchorPoint.fun</title>
     <style>
+        /* Global & Layout Styles */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
         body {
-            background-color: #121214;
-            color: #ffffff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f7;
+            color: #1a1a1e;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: #111;
+        }
+        header p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        /* Neal.fun Inspired Grid Layout */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 25px;
+            max-width: 1100px;
+            width: 100%;
+        }
+        .game-card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02), 0 10px 15px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.06);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-            overflow: hidden;
         }
-        header {
-            margin-bottom: 10px;
-            text-align: center;
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px rgba(0,0,0,0.06);
         }
-        h1 {
-            font-size: 2.5rem;
-            color: #00ffcc;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+        .game-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
         }
-        p {
-            color: #8a8a93;
+        .game-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #222;
+            margin-bottom: 8px;
+        }
+        .game-card p {
             font-size: 0.9rem;
+            color: #777;
         }
-        #gameContainer {
+
+        /* Smooth Popup / Modal System */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-content {
+            background: #ffffff;
+            width: 90%;
+            max-width: 850px;
+            height: 85%;
+            max-height: 650px;
+            border-radius: 24px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.1);
             position: relative;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
-            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
             overflow: hidden;
-            border: 2px solid #333;
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
         }
-        canvas {
-            display: block;
-            background-color: #1a1a1e;
-            cursor: none; /* Hides default mouse cursor over the game */
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
         }
-        #ui {
+        .close-btn {
             position: absolute;
             top: 15px;
-            left: 15px;
-            pointer-events: none;
-            font-size: 1.2rem;
+            right: 20px;
+            font-size: 2rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #999;
+            transition: color 0.2s;
+            z-index: 1010;
+        }
+        .close-btn:hover {
+            color: #333;
+        }
+        .game-arena {
+            flex: 1;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #111; /* Games generally look better with dark canvas backs */
+            position: relative;
+        }
+
+        /* --- MINI GAME SPECIFIC INTERFACES --- */
+        /* Clicker Game UI */
+        .clicker-ui {
+            color: white;
+            text-align: center;
+            font-family: sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        .big-anchor {
+            font-size: 6rem;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.1s;
+        }
+        .big-anchor:active { transform: scale(0.85); }
+        .upgrade-btn {
+            background: #00ffcc;
+            color: #111;
+            border: none;
+            padding: 10px 20px;
             font-weight: bold;
-            background: rgba(0,0,0,0.5);
-            padding: 10px 15px;
-            border-radius: 5px;
-            border-left: 4px solid #00ffcc;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        /* Reflex Grid UI */
+        .reflex-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            gap: 15px;
+        }
+        .reflex-box {
+            width: 100px;
+            height: 100px;
+            background: #222;
+            border-radius: 12px;
+            cursor: pointer;
+            border: 2px solid #333;
+            transition: background 0.1s;
+        }
+        .reflex-score {
+            position: absolute;
+            top: 20px;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>AnchorPoint Groundz</h1>
-        <p>Move your mouse to navigate. Absorb the dots to grow larger!</p>
+        <h1>AnchorPoint.fun</h1>
+        <p>A collection of small, interactive Web toys.</p>
     </header>
 
-    <div id="gameContainer">
-        <div id="ui">Score: <span id="scoreVal">0</span></div>
-        <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div class="grid-container">
+        <div class="game-card" onclick="openGame('groundz')">
+            <div class="game-icon">🟢</div>
+            <h3>Groundz .io</h3>
+            <p>Absorb dots and grow into a massive cell.</p>
+        </div>
+        <div class="game-card" onclick="openGame('clicker')">
+            <div class="game-icon">⚓</div>
+            <h3>Anchor Clicker</h3>
+            <p>Click the golden anchor and buy upgrades.</p>
+        </div>
+        <div class="game-card" onclick="openGame('reflex')">
+            <div class="game-icon">⚡</div>
+            <h3>Reflex Grid</h3>
+            <p>Test your reaction speeds against the clock.</p>
+        </div>
+        <div class="game-card" onclick="openGame('sandbox')">
+            <div class="game-icon">⏳</div>
+            <h3>Sand Sandbox</h3>
+            <p>Click and hold to paint falling sand physics.</p>
+        </div>
+    </div>
+
+    <div id="gameModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeGame()">&times;</button>
+            <div id="gameArena" class="game-arena">
+                </div>
+        </div>
     </div>
 
     <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const scoreVal = document.getElementById('scoreVal');
+        const modal = document.getElementById('gameModal');
+        const arena = document.getElementById('gameArena');
+        let currentLoop = null; // Tracks canvas animation frames to stop them cleanly
 
-        // Game Variables
-        let score = 0;
-        let gameOver = false;
+        // Open Game Popup
+        function openGame(gameType) {
+            modal.classList.add('active');
+            arena.innerHTML = ""; // Wipe previous game state
+            if(currentLoop) cancelAnimationFrame(currentLoop);
 
-        // Player properties
-        const player = {
-            x: canvas.width / 2,
-            y: canvas.height / 2,
-            radius: 15,
-            color: '#00ffcc',
-            speed: 0.08 // How smoothly it follows the mouse
-        };
-
-        // Mouse position tracking
-        const mouse = {
-            x: canvas.width / 2,
-            y: canvas.height / 2
-        };
-
-        // Food array
-        const foods = [];
-        const maxFood = 40;
-
-        // Track mouse movement relative to canvas
-        canvas.addEventListener('mousemove', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            mouse.x = e.clientX - rect.left;
-            mouse.y = e.clientY - rect.top;
-        });
-
-        // Generate food at random positions
-        function spawnFood() {
-            return {
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                radius: Math.random() * 4 + 3,
-                color: `hsl(${Math.random() * 360}, 100%, 60%)`
-            };
+            // Load Game Dynamic Modules
+            if (gameType === 'groundz') loadGroundz();
+            if (gameType === 'clicker') loadClicker();
+            if (gameType === 'reflex') loadReflex();
+            if (gameType === 'sandbox') loadSandbox();
         }
 
-        // Populate initial food
-        for (let i = 0; i < maxFood; i++) {
-            foods.push(spawnFood());
+        // Close Game Popup Safely
+        function closeGame() {
+            modal.classList.remove('active');
+            arena.innerHTML = "";
+            if(currentLoop) cancelAnimationFrame(currentLoop);
         }
 
-        // Distance formula to check for collisions
-        function getDistance(x1, y1, x2, y2) {
-            return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-        }
+        // --- GAME 1: GROUNDZ .IO ---
+        function loadGroundz() {
+            arena.innerHTML = `<div style="position:absolute; top:15px; left:20px; color:#00ffcc; font-weight:bold; font-size:1.2rem;">Score: <span id="gzScore">0</span></div><canvas id="gzCanvas" width="800" height="550" style="background:#131316; cursor:none;"></canvas>`;
+            const canvas = document.getElementById('gzCanvas');
+            const ctx = canvas.getContext('2d');
+            const scoreDisplay = document.getElementById('gzScore');
+            
+            let score = 0, player = { x: 400, y: 275, radius: 15 }, mouse = { x: 400, y: 275 }, foods = [];
+            canvas.addEventListener('mousemove', (e) => {
+                const r = canvas.getBoundingClientRect();
+                mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
+            });
+            function spawnFood() { return { x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*4+3, c: `hsl(${Math.random()*360},100%,60%)` }; }
+            for(let i=0; i<40; i++) foods.push(spawnFood());
 
-        // Main Game Loop
-        function gameLoop() {
-            // 1. Clear the canvas for the new frame
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // 2. Draw Grid Background (gives a standard .io feel)
-            ctx.strokeStyle = '#232329';
-            ctx.lineWidth = 1;
-            const gridSize = 40;
-            for (let x = 0; x < canvas.width; x += gridSize) {
-                ctx.beginPath();
-                ctx.moveTo(x, 0);
-                ctx.lineTo(x, canvas.height);
-                ctx.stroke();
-            }
-            for (let y = 0; y < canvas.height; y += gridSize) {
-                ctx.beginPath();
-                ctx.moveTo(0, y);
-                ctx.lineTo(canvas.width, y);
-                ctx.stroke();
-            }
-
-            // 3. Move Player smoothly toward mouse position
-            player.x += (mouse.x - player.x) * player.speed;
-            player.y += (mouse.y - player.y) * player.speed;
-
-            // Keep player inside canvas boundaries
-            if (player.x < player.radius) player.x = player.radius;
-            if (player.x > canvas.width - player.radius) player.x = canvas.width - player.radius;
-            if (player.y < player.radius) player.y = player.radius;
-            if (player.y > canvas.height - player.radius) player.y = canvas.height - player.radius;
-
-            // 4. Draw and manage Food
-            for (let i = foods.length - 1; i >= 0; i--) {
-                const food = foods[i];
-                
-                // Draw food dot
-                ctx.beginPath();
-                ctx.arc(food.x, food.y, food.radius, 0, Math.PI * 2);
-                ctx.fillStyle = food.color;
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = food.color;
-                ctx.fill();
-                ctx.shadowBlur = 0; // Reset shadow for next drawings
-
-                // Collision detection between Player and Food
-                const dist = getDistance(player.x, player.y, food.x, food.y);
-                if (dist < player.radius + food.radius) {
-                    // Eat food
-                    foods.splice(i, 1);
-                    score += 10;
-                    scoreVal.textContent = score;
-                    
-                    // Grow player slightly, up to a limit
-                    if (player.radius < 60) {
-                        player.radius += 0.5;
+            function loop() {
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                // Grid Background
+                ctx.strokeStyle = '#222'; ctx.lineWidth = 1;
+                for(let x=0; x<canvas.width; x+=40) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,canvas.height); ctx.stroke(); }
+                for(let y=0; y<canvas.height; y+=40) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke(); }
+                // Move Player
+                player.x += (mouse.x - player.x) * 0.08; player.y += (mouse.y - player.y) * 0.08;
+                // Render/Eat food
+                for(let i=foods.length-1; i>=0; i--) {
+                    ctx.beginPath(); ctx.arc(foods[i].x, foods[i].y, foods[i].r, 0, Math.PI*2); ctx.fillStyle = foods[i].c; ctx.fill();
+                    let dist = Math.sqrt((foods[i].x-player.x)**2 + (foods[i].y-player.y)**2);
+                    if(dist < player.radius + foods[i].r) {
+                        foods.splice(i,1); score += 10; scoreDisplay.innerText = score;
+                        if(player.radius < 60) player.radius += 0.5;
+                        foods.push(spawnFood());
                     }
-
-                    // Replace eaten food
-                    foods.push(spawnFood());
                 }
+                // Render Player
+                ctx.beginPath(); ctx.arc(player.x, player.y, player.radius, 0, Math.PI*2); ctx.fillStyle = '#00ffcc'; ctx.fill();
+                currentLoop = requestAnimationFrame(loop);
             }
-
-            // 5. Draw Player
-            ctx.beginPath();
-            ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
-            ctx.fillStyle = player.color;
-            ctx.shadowBlur = 20;
-            ctx.shadowColor = player.color;
-            ctx.fill();
-            ctx.shadowBlur = 0;
-
-            // Draw inner core for player styling
-            ctx.beginPath();
-            ctx.arc(player.x, player.y, player.radius * 0.4, 0, Math.PI * 2);
-            ctx.fillStyle = '#ffffff';
-            ctx.fill();
-
-            // Run loop recursively
-            requestAnimationFrame(gameLoop);
+            loop();
         }
 
-        // Start the game
-        gameLoop();
+        // --- GAME 2: ANCHOR CLICKER ---
+        function loadClicker() {
+            let anchors = 0, gps = 0, upgradeCost = 15;
+            arena.innerHTML = `
+                <div class="clicker-ui">
+                    <div style="font-size:1.5rem;">Gold Anchors: <span id="ancCount">0</span></div>
+                    <div style="font-size:0.9rem; color:#aaa;"><span id="gpsCount">0</span>/sec</div>
+                    <div class="big-anchor" id="anchorBtn">⚓</div>
+                    <button class="upgrade-btn" id="upgBtn">Buy Crew (Cost: 15)</button>
+                </div>`;
+            
+            const btn = document.getElementById('anchorBtn');
+            const count = document.getElementById('ancCount');
+            const gpsDisp = document.getElementById('gpsCount');
+            const upg = document.getElementById('upgBtn');
+
+            btn.onclick = () => { anchors++; count.innerText = anchors; };
+            upg.onclick = () => {
+                if(anchors >= upgradeCost) {
+                    anchors -= upgradeCost;
+                    gps += 1;
+                    upgradeCost = Math.floor(upgradeCost * 1.5);
+                    count.innerText = anchors;
+                    gpsDisp.innerText = gps;
+                    upg.innerText = `Buy Crew (Cost: ${upgradeCost})`;
+                }
+            };
+            function runGps() {
+                anchors += gps;
+                count.innerText = anchors;
+                setTimeout(runGps, 1000);
+            }
+            runGps();
+        }
+
+        // --- GAME 3: REFLEX GRID ---
+        function loadReflex() {
+            arena.innerHTML = `<div class="reflex-score">Score: <span id="refScore">0</span></div><div class="reflex-grid" id="rGrid"></div>`;
+            const grid = document.getElementById('rGrid');
+            const scoreDisp = document.getElementById('refScore');
+            let score = 0, activeIndex = -1;
+
+            for(let i=0; i<9; i++) {
+                let box = document.createElement('div');
+                box.className = 'reflex-box';
+                box.dataset.index = i;
+                box.onclick = () => {
+                    if(parseInt(box.dataset.index) === activeIndex) {
+                        score++; scoreDisp.innerText = score; triggerNext();
+                    }
+                };
+                grid.appendChild(box);
+            }
+
+            function triggerNext() {
+                const boxes = document.querySelectorAll('.reflex-box');
+                boxes.forEach(b => b.style.backgroundColor = '#222');
+                let next = Math.floor(Math.random() * 9);
+                while(next === activeIndex) { next = Math.floor(Math.random() * 9); }
+                activeIndex = next;
+                boxes[activeIndex].style.backgroundColor = '#ff3366';
+            }
+            triggerNext();
+        }
+
+        // --- GAME 4: SAND PHYSICS SANDBOX ---
+        function loadSandbox() {
+            arena.innerHTML = `<canvas id="sandCanvas" width="500" height="500" style="background:#000;"></canvas><div style="position:absolute; bottom:15px; color:#888; font-size:0.8rem;">Click & Drag to drop sand</div>`;
+            const canvas = document.getElementById('sandCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            const width = 125, height = 125, size = 4;
+            let grid = Array(width).fill().map(() => Array(height).fill(0));
+            let isDrawing = false, mouseX = 0, mouseY = 0;
+
+            canvas.onmousedown = () => isDrawing = true;
+            window.onmouseup = () => isDrawing = false;
+            canvas.onmousemove = (e) => {
+                const r = canvas.getBoundingClientRect();
+                mouseX = Math.floor((e.clientX - r.left) / size);
+                mouseY = Math.floor((e.clientY - r.top) / size);
+            };
+
+            function sandLoop() {
+                if (isDrawing && mouseX >= 0 && mouseX < width && mouseY >= 0 && mouseY < height) {
+                    for(let xOffset=-1; xOffset<=1; xOffset++) {
+                        let nx = mouseX + xOffset;
+                        if(nx >= 0 && nx < width && Math.random() > 0.3) grid[nx][mouseY] = 1;
+                    }
+                }
+
+                // Physics update (bottom-to-top execution avoids single-frame warp drops)
+                let nextGrid = Array(width).fill().map(() => Array(height).fill(0));
+                for(let y = height - 1; y >= 0; y--) {
+                    for(let x = 0; x < width; x++) {
+                        if (grid[x][y] === 1) {
+                            if (y + 1 < height && grid[x][y+1] === 0 && nextGrid[x][y+1] === 0) {
+                                nextGrid[x][y+1] = 1; // Fall down
+                            } else {
+                                let leftEmpty = (x - 1 >= 0 && grid[x-1][y+1] === 0 && nextGrid[x-1][y+1] === 0);
+                                let rightEmpty = (x + 1 < width && grid[x+1][y+1] === 0 && nextGrid[x+1][y+1] === 0);
+                                if (leftEmpty && rightEmpty) {
+                                    let dir = Math.random() < 0.5 ? -1 : 1;
+                                    nextGrid[x+dir][y+1] = 1;
+                                } else if (leftEmpty) { nextGrid[x-1][y+1] = 1; }
+                                else if (rightEmpty) { nextGrid[x+1][y+1] = 1; }
+                                else { nextGrid[x][y] = 1; } // Stay
+                            }
+                        }
+                    }
+                }
+                grid = nextGrid;
+
+                // Render Frame
+                ctx.clearRect(0,0,canvas.width,canvas.height);
+                for(let x=0; x<width; x++) {
+                    for(let y=0; y<height; y++) {
+                        if(grid[x][y] === 1) {
+                            ctx.fillStyle = `hsl(${(x+y)%360}, 80%, 60%)`;
+                            ctx.fillRect(x*size, y*size, size, size);
+                        }
+                    }
+                }
+                currentLoop = requestAnimationFrame(sandLoop);
+            }
+            sandLoop();
+        }
     </script>
 </body>
 </html>
