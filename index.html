@@ -5,423 +5,551 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AnchorPoint.fun</title>
     <style>
-        /* Global & Layout Styles */
+        /* Calming Pastel-Dark Aesthetics */
+        :root {
+            --bg-color: #161623;
+            --card-bg: rgba(255, 255, 255, 0.04);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f0edf5;
+            --text-sub: #9ca3af;
+            --accent: #b39ddb;
+            --accent-glow: rgba(179, 157, 219, 0.4);
+        }
+
+        body.party-mode {
+            animation: rainbowBg 5s linear infinite;
+        }
+        @keyframes rainbowBg {
+            0% { background: #2a1b3d; }
+            33% { background: #1b3d33; }
+            66% { background: #3d1b24; }
+            100% { background: #2a1b3d; }
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
         body {
-            background-color: #f4f4f7;
-            color: #1a1a1e;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: system-ui, -apple-system, sans-serif;
             padding: 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
+            overflow-x: hidden;
+            transition: background 0.5s ease;
+        }
+
+        /* Header & Dancing Characters Layout */
+        .header-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 50px;
+            user-select: none;
         }
         header {
             text-align: center;
-            margin-bottom: 50px;
         }
         header h1 {
-            font-size: 3.5rem;
+            font-size: 3.8rem;
             font-weight: 800;
             letter-spacing: -1px;
-            color: #111;
+            color: #fff;
+            text-shadow: 0 0 20px var(--accent-glow);
+            cursor: pointer;
         }
         header p {
-            font-size: 1.2rem;
-            color: #666;
+            font-size: 1.1rem;
+            color: var(--text-sub);
             margin-top: 5px;
         }
 
-        /* Neal.fun Inspired Grid Layout */
+        /* Animated Pure CSS Pixel-Style Dancers */
+        .pixel-dancer {
+            width: 50px;
+            height: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .pixel-dancer:active {
+            transform: scale(2) rotate(360deg) !important;
+        }
+        .dancer-left { animation: danceLeft 1.2s ease-in-out infinite; }
+        .dancer-right { animation: danceRight 1.2s ease-in-out infinite; alternate; }
+
+        @keyframes danceLeft {
+            0%, 100% { transform: translateY(0) scaleY(1) rotate(0deg); }
+            50% { transform: translateY(-12px) scaleY(0.9) rotate(-8deg); }
+        }
+        @keyframes danceRight {
+            0%, 100% { transform: translateY(0) scaleY(1) rotate(0deg); }
+            50% { transform: translateY(-12px) scaleY(0.9) rotate(8deg); }
+        }
+
+        /* Custom Pixel Art via SVG String Icons */
+        .pixel-body {
+            width: 32px;
+            height: 32px;
+            background: var(--accent);
+            box-shadow: 0 4px 0 #7e57c2, inset -4px -4px 0 rgba(0,0,0,0.2);
+            border-radius: 4px;
+            position: relative;
+        }
+        .pixel-eyes {
+            position: absolute;
+            top: 8px; left: 6px; width: 6px; height: 6px; background: #000;
+            box-shadow: 14px 0 0 #000;
+        }
+        .pixel-limbs {
+            display: flex; justify-content: space-between; width: 40px; margin-top: 2px;
+        }
+        .pixel-foot { width: 10px; height: 8px; background: #7e57c2; border-radius: 2px; }
+
+        /* Smooth Calming Grid */
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
             max-width: 1100px;
             width: 100%;
         }
         .game-card {
-            background: white;
-            border-radius: 16px;
-            padding: 30px 20px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px 20px;
             text-align: center;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02), 0 10px 15px rgba(0,0,0,0.03);
-            border: 1px solid rgba(0,0,0,0.06);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border);
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
         }
         .game-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 20px 25px rgba(0,0,0,0.06);
+            background: rgba(255,255,255,0.08);
+            border-color: var(--accent);
+            box-shadow: 0 15px 30px var(--accent-glow);
         }
         .game-icon {
-            font-size: 3rem;
-            margin-bottom: 15px;
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.2));
         }
         .game-card h3 {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #222;
-            margin-bottom: 8px;
+            font-size: 1.25rem;
+            color: #fff;
+            margin-bottom: 6px;
         }
         .game-card p {
-            font-size: 0.9rem;
-            color: #777;
+            font-size: 0.85rem;
+            color: var(--text-sub);
+            line-height: 1.3;
         }
 
-        /* Smooth Popup / Modal System */
+        /* Micro-interactions Overlay Portal */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(15px);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1);
             z-index: 1000;
         }
         .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
+            opacity: 1; pointer-events: auto;
         }
         .modal-content {
-            background: #ffffff;
-            width: 90%;
-            max-width: 850px;
-            height: 85%;
-            max-height: 650px;
-            border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
-            border: 1px solid rgba(0,0,0,0.1);
+            background: #1c1c28;
+            width: 90%; max-width: 800px;
+            height: 80%; max-height: 600px;
+            border-radius: 28px;
+            border: 1px solid rgba(255,255,255,0.1);
             position: relative;
-            display: flex;
-            flex-direction: column;
+            display: flex; flex-direction: column;
             overflow: hidden;
-            transform: scale(0.95);
-            transition: transform 0.3s ease;
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
         .modal-overlay.active .modal-content {
-            transform: scale(1);
+            transform: scale(1) translateY(0);
         }
         .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 2rem;
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: #999;
-            transition: color 0.2s;
-            z-index: 1010;
+            position: absolute; top: 15px; right: 20px;
+            font-size: 2rem; background: none; border: none;
+            cursor: pointer; color: #666; transition: color 0.2s; z-index: 1010;
         }
-        .close-btn:hover {
-            color: #333;
-        }
+        .close-btn:hover { color: #fff; }
         .game-arena {
-            flex: 1;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #111; /* Games generally look better with dark canvas backs */
-            position: relative;
+            flex: 1; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
         }
 
-        /* --- MINI GAME SPECIFIC INTERFACES --- */
-        /* Clicker Game UI */
-        .clicker-ui {
-            color: white;
-            text-align: center;
-            font-family: sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
-        }
-        .big-anchor {
-            font-size: 6rem;
-            cursor: pointer;
-            user-select: none;
-            transition: transform 0.1s;
-        }
-        .big-anchor:active { transform: scale(0.85); }
-        .upgrade-btn {
-            background: #00ffcc;
-            color: #111;
-            border: none;
-            padding: 10px 20px;
-            font-weight: bold;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-        /* Reflex Grid UI */
-        .reflex-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 100px);
-            gap: 15px;
-        }
-        .reflex-box {
-            width: 100px;
-            height: 100px;
-            background: #222;
-            border-radius: 12px;
-            cursor: pointer;
-            border: 2px solid #333;
-            transition: background 0.1s;
-        }
-        .reflex-score {
-            position: absolute;
-            top: 20px;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
+        /* Game Internal UI Styles */
+        .clicker-ui { display: flex; flex-direction: column; align-items: center; gap: 15px; text-align: center; }
+        .big-btn { font-size: 5rem; cursor: pointer; transition: transform 0.1s; user-select: none; }
+        .big-btn:active { transform: scale(0.85); }
+        .game-btn { background: var(--accent); color: #111; border: none; padding: 10px 20px; font-weight: bold; border-radius: 12px; cursor: pointer; }
+        
+        /* Harmonious Sound Chimes Grid UI */
+        .sound-grid { display: grid; grid-template-columns: repeat(4, 70px); gap: 15px; }
+        .sound-pad { width: 70px; height: 70px; background: rgba(255,255,255,0.1); border-radius: 16px; cursor: pointer; transition: background 0.2s; border: 1px solid rgba(255,255,255,0.05); }
+        .sound-pad:active { background: #80cbc4; }
+
+        /* Breathing Circle */
+        .breath-circle { width: 100px; height: 100px; background: #80deea; border-radius: 50%; opacity: 0.7; animation: breathe 8s ease-in-out infinite; box-shadow: 0 0 50px rgba(128,222,234,0.6); }
+        @keyframes breathe { 0%, 100% { transform: scale(1); background: #80deea; } 50% { transform: scale(2.2); background: #b39ddb; } }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>AnchorPoint.fun</h1>
-        <p>A collection of small, interactive Web toys.</p>
-    </header>
+    <div class="header-wrapper">
+        <div class="pixel-dancer dancer-left">
+            <div class="pixel-body"><div class="pixel-eyes"></div></div>
+            <div class="pixel-limbs"><div class="pixel-foot"></div><div class="pixel-foot"></div></div>
+        </div>
+        
+        <header>
+            <h1 id="mainTitle">AnchorPoint.fun</h1>
+            <p>A serene universe of 14 calming, interactive toys.</p>
+        </header>
+
+        <div class="pixel-dancer dancer-right">
+            <div class="pixel-body" style="background:#80cbc4;"><div class="pixel-eyes"></div></div>
+            <div class="pixel-limbs"><div class="pixel-foot" style="background:#80cbc4;"></div><div class="pixel-foot" style="background:#80cbc4;"></div></div>
+        </div>
+    </div>
 
     <div class="grid-container">
-        <div class="game-card" onclick="openGame('groundz')">
-            <div class="game-icon">🟢</div>
-            <h3>Groundz .io</h3>
-            <p>Absorb dots and grow into a massive cell.</p>
-        </div>
-        <div class="game-card" onclick="openGame('clicker')">
-            <div class="game-icon">⚓</div>
-            <h3>Anchor Clicker</h3>
-            <p>Click the golden anchor and buy upgrades.</p>
-        </div>
-        <div class="game-card" onclick="openGame('reflex')">
-            <div class="game-icon">⚡</div>
-            <h3>Reflex Grid</h3>
-            <p>Test your reaction speeds against the clock.</p>
-        </div>
-        <div class="game-card" onclick="openGame('sandbox')">
-            <div class="game-icon">⏳</div>
-            <h3>Sand Sandbox</h3>
-            <p>Click and hold to paint falling sand physics.</p>
-        </div>
+        <div class="game-card" onclick="openGame('groundz')"><div class="game-icon">🟢</div><h3>Groundz .io</h3><p>Absorb energy nodes and grow into deep space.</p></div>
+        <div class="game-card" onclick="openGame('clicker')"><div class="game-icon">⚓</div><h3>Anchor Clicker</h3><p>Tap the anchor to build a soft maritime forge.</p></div>
+        <div class="game-card" onclick="openGame('reflex')"><div class="game-icon">⚡</div><h3>Reflex Neon</h3><p>Calmly track and lock down flashing glowing cells.</p></div>
+        <div class="game-card" onclick="openGame('sandbox')"><div class="game-icon">⏳</div><h3>Sand Canvas</h3><p>A physics framework displaying beautiful falling sand.</p></div>
+        <div class="game-card" onclick="openGame('orchard')"><div class="game-icon">🌸</div><h3>Zen Orchard</h3><p>Click anywhere to sprout custom procedural fauna.</p></div>
+        <div class="game-card" onclick="openGame('chimes')"><div class="game-icon">🎵</div><h3>Harmonic Chimes</h3><p>Trigger synthesizers with sound frequencies.</p></div>
+        <div class="game-card" onclick="openGame('orbit')"><div class="game-icon">🪐</div><h3>Cosmic Gravity</h3><p>Tap to lock satellite paths into safe circular loops.</p></div>
+        <div class="game-card" onclick="openGame('breath')"><div class="game-icon">🌬️</div><h3>Breathe Box</h3><p>Synchronize your posture with a visual expansion metric.</p></div>
+        <div class="game-card" onclick="openGame('stars')"><div class="game-icon">✨</div><h3>Star Collector</h3><p>Catch gentle drifting falling stellar fragments.</p></div>
+        <div class="game-card" onclick="openGame('memory')"><div class="game-icon">🔮</div><h3>Rune Matching</h3><p>Flip tiles to mirror cosmic matching patterns.</p></div>
+        <div class="game-card" onclick="openGame('tint')"><div class="game-icon">🎨</div><h3>Tint Matcher</h3><p>Adjust color nodes to align with custom backgrounds.</p></div>
+        <div class="game-card" onclick="openGame('stack')"><div class="game-icon">🧱</div><h3>Tower Alignment</h3><p>Stack geometric layers seamlessly over each other.</p></div>
+        <div class="game-card" onclick="openGame('text')"><div class="game-icon">🍃</div><h3>Leaf Typer</h3><p>Clear drift phrases by matching character patterns.</p></div>
+        <div class="game-card" onclick="openGame('maze')"><div class="game-icon">🧭</div><h3>Grid Pathfinder</h3><p>Guide an illuminated vector node through paths.</p></div>
     </div>
 
     <div id="gameModal" class="modal-overlay">
         <div class="modal-content">
             <button class="close-btn" onclick="closeGame()">&times;</button>
-            <div id="gameArena" class="game-arena">
-                </div>
+            <div id="gameArena" class="game-arena"></div>
         </div>
     </div>
 
     <script>
         const modal = document.getElementById('gameModal');
         const arena = document.getElementById('gameArena');
-        let currentLoop = null; // Tracks canvas animation frames to stop them cleanly
+        let currentLoop = null;
+        let audioCtx = null; // Instantiated safely on user demand
 
-        // Open Game Popup
-        function openGame(gameType) {
+        // Easter Egg 1: Header Party Mode Clicker
+        let clickCount = 0;
+        document.getElementById('mainTitle').onclick = () => {
+            clickCount++;
+            if(clickCount >= 5) {
+                document.body.classList.toggle('party-mode');
+                clickCount = 0;
+            }
+        };
+
+        // Easter Egg 2: Secret Keyboard Typing Tracker
+        let inputString = "";
+        window.onkeydown = (e) => {
+            inputString += e.key.toLowerCase();
+            if(inputString.endsWith("zen")) {
+                alert("✨ Inner peace unlocked! The site aesthetic has entered ultra-glow.");
+                document.documentElement.style.setProperty('--accent', '#ff80ab');
+                inputString = "";
+            }
+        };
+
+        function openGame(game) {
             modal.classList.add('active');
-            arena.innerHTML = ""; // Wipe previous game state
+            arena.innerHTML = "";
             if(currentLoop) cancelAnimationFrame(currentLoop);
 
-            // Load Game Dynamic Modules
-            if (gameType === 'groundz') loadGroundz();
-            if (gameType === 'clicker') loadClicker();
-            if (gameType === 'reflex') loadReflex();
-            if (gameType === 'sandbox') loadSandbox();
+            // Engine Selection Router
+            if(game==='groundz') loadGroundz();
+            if(game==='clicker') loadClicker();
+            if(game==='reflex') loadReflex();
+            if(game==='sandbox') loadSandbox();
+            if(game==='orchard') loadOrchard();
+            if(game==='chimes') loadChimes();
+            if(game==='orbit') loadOrbit();
+            if(game==='breath') loadBreath();
+            if(game==='stars') loadStars();
+            if(game==='memory') loadMemory();
+            if(game==='tint') loadTint();
+            if(game==='stack') loadStack();
+            if(game==='text') loadText();
+            if(game==='maze') loadMaze();
         }
 
-        // Close Game Popup Safely
         function closeGame() {
             modal.classList.remove('active');
             arena.innerHTML = "";
             if(currentLoop) cancelAnimationFrame(currentLoop);
         }
 
-        // --- GAME 1: GROUNDZ .IO ---
+        /* --- 1. GROUNDZ .IO --- */
         function loadGroundz() {
-            arena.innerHTML = `<div style="position:absolute; top:15px; left:20px; color:#00ffcc; font-weight:bold; font-size:1.2rem;">Score: <span id="gzScore">0</span></div><canvas id="gzCanvas" width="800" height="550" style="background:#131316; cursor:none;"></canvas>`;
-            const canvas = document.getElementById('gzCanvas');
-            const ctx = canvas.getContext('2d');
-            const scoreDisplay = document.getElementById('gzScore');
-            
-            let score = 0, player = { x: 400, y: 275, radius: 15 }, mouse = { x: 400, y: 275 }, foods = [];
-            canvas.addEventListener('mousemove', (e) => {
-                const r = canvas.getBoundingClientRect();
-                mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
-            });
-            function spawnFood() { return { x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*4+3, c: `hsl(${Math.random()*360},100%,60%)` }; }
-            for(let i=0; i<40; i++) foods.push(spawnFood());
+            arena.innerHTML = `<canvas id="gzC" width="700" height="500" style="background:#0e0e12; cursor:none;"></canvas>`;
+            const c = document.getElementById('gzC'), ctx = c.getContext('2d');
+            let p = {x:350, y:250, r:15}, m = {x:350, y:250}, dots = [];
+            c.onmousemove = (e) => { const r = c.getBoundingClientRect(); m.x = e.clientX-r.left; m.y = e.clientY-r.top; };
+            for(let i=0; i<30; i++) dots.push({x:Math.random()*c.width, y:Math.random()*c.height, r:4, col:'#b39ddb'});
+            function render() {
+                ctx.clearRect(0,0,c.width,c.height);
+                p.x += (m.x - p.x)*0.08; p.y += (m.y - p.y)*0.08;
+                dots.forEach((d, i) => {
+                    ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI*2); ctx.fillStyle = d.col; ctx.fill();
+                    if(Math.hypot(d.x-p.x, d.y-p.y) < p.r) { dots[i] = {x:Math.random()*c.width, y:Math.random()*c.height, r:4, col:'#b39ddb'}; if(p.r<50) p.r+=1; }
+                });
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fillStyle = '#80cbc4'; ctx.fill();
+                currentLoop = requestAnimationFrame(render);
+            }
+            render();
+        }
 
-            function loop() {
-                ctx.clearRect(0,0,canvas.width,canvas.height);
-                // Grid Background
-                ctx.strokeStyle = '#222'; ctx.lineWidth = 1;
-                for(let x=0; x<canvas.width; x+=40) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,canvas.height); ctx.stroke(); }
-                for(let y=0; y<canvas.height; y+=40) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke(); }
-                // Move Player
-                player.x += (mouse.x - player.x) * 0.08; player.y += (mouse.y - player.y) * 0.08;
-                // Render/Eat food
-                for(let i=foods.length-1; i>=0; i--) {
-                    ctx.beginPath(); ctx.arc(foods[i].x, foods[i].y, foods[i].r, 0, Math.PI*2); ctx.fillStyle = foods[i].c; ctx.fill();
-                    let dist = Math.sqrt((foods[i].x-player.x)**2 + (foods[i].y-player.y)**2);
-                    if(dist < player.radius + foods[i].r) {
-                        foods.splice(i,1); score += 10; scoreDisplay.innerText = score;
-                        if(player.radius < 60) player.radius += 0.5;
-                        foods.push(spawnFood());
+        /* --- 2. ANCHOR CLICKER --- */
+        function loadClicker() {
+            let score = 0;
+            arena.innerHTML = `<div class="clicker-ui"><h3>Forged Items: <span id="cSc">0</span></h3><div class="big-btn" id="cAk">⚓</div></div>`;
+            document.getElementById('cAk').onclick = () => { score++; document.getElementById('cSc').innerText = score; };
+        }
+
+        /* --- 3. REFLEX NEON --- */
+        function loadReflex() {
+            arena.innerHTML = `<div style="color:#fff;">Click target cell fast: <span id="rfS" style="font-weight:bold;color:#80cbc4;">0</span></div><div class="sound-grid" id="rfG" style="position:absolute;"></div>`;
+            const g = document.getElementById('rfG'); let score=0, active=-1;
+            for(let i=0; i<16; i++) {
+                let d = document.createElement('div'); d.className='sound-pad';
+                d.onclick = () => { if(i===active) { score++; document.getElementById('rfS').innerText = score; advance(); } };
+                g.appendChild(d);
+            }
+            function advance() {
+                const pads = g.querySelectorAll('.sound-pad'); pads.forEach(p=>p.style.background='rgba(255,255,255,0.1)');
+                active = Math.floor(Math.random()*16); pads[active].style.background='#b39ddb';
+            }
+            advance();
+        }
+
+        /* --- 4. SAND CANVAS --- */
+        function loadSandbox() {
+            arena.innerHTML = `<canvas id="sdC" width="400" height="400" style="background:#050508;"></canvas>`;
+            const c = document.getElementById('sdC'), ctx = c.getContext('2d'), w=100, h=100, sz=4;
+            let m=Array(w).fill().map(()=>Array(h).fill(0)), down=false, mx=0, my=0;
+            c.onmousedown=()=>down=true; window.onmouseup=()=>down=false;
+            c.onmousemove=(e)=>{ const r=c.getBoundingClientRect(); mx=Math.floor((e.clientX-r.left)/sz); my=Math.floor((e.clientY-r.top)/sz); };
+            function run() {
+                if(down && mx>=0 && mx<w && my>=0 && my<h) m[mx][my]=1;
+                ctx.clearRect(0,0,c.width,c.height);
+                for(let y=h-2; y>=0; y--) {
+                    for(let x=0; x<w; x++) {
+                        if(m[x][y]===1) {
+                            if(m[x][y+1]===0) { m[x][y]=0; m[x][y+1]=1; }
+                            else if(x>0 && m[x-1][y+1]===0) { m[x][y]=0; m[x-1][y+1]=1; }
+                            else if(x<w-1 && m[x+1][y+1]===0) { m[x][y]=0; m[x+1][y+1]=1; }
+                        }
                     }
                 }
-                // Render Player
-                ctx.beginPath(); ctx.arc(player.x, player.y, player.radius, 0, Math.PI*2); ctx.fillStyle = '#00ffcc'; ctx.fill();
+                for(let x=0; x<w; x++) for(let y=0; y<h; y++) if(m[x][y]===1) { ctx.fillStyle='#b39ddb'; ctx.fillRect(x*sz,y*sz,sz,sz); }
+                currentLoop = requestAnimationFrame(run);
+            }
+            run();
+        }
+
+        /* --- 5. ZEN ORCHARD --- */
+        function loadOrchard() {
+            arena.innerHTML = `<canvas id="orC" width="700" height="500" style="background:#111218;"></canvas><div style="position:absolute; bottom:15px; color:#666;">Click to plant procedural branches</div>`;
+            const c = document.getElementById('orC'), ctx = c.getContext('2d');
+            c.onclick = (e) => { const r=c.getBoundingClientRect(); drawTree(e.clientX-r.left, 450, 60, -Math.PI/2, 8); };
+            function drawTree(x, y, len, angle, depth) {
+                if(depth===0) return;
+                let x2 = x + Math.cos(angle)*len, y2 = y + Math.sin(angle)*len;
+                ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x2,y2); ctx.strokeStyle= depth<3 ? '#ffb74d':'#80cbc4'; ctx.lineWidth=depth; ctx.stroke();
+                setTimeout(()=> {
+                    drawTree(x2, y2, len*0.75, angle - 0.4, depth-1);
+                    drawTree(x2, y2, len*0.75, angle + 0.4, depth-1);
+                }, 40);
+            }
+        }
+
+        /* --- 6. HARMONIC CHIMES --- */
+        function loadChimes() {
+            arena.innerHTML = `<div class="sound-grid" id="chG"></div>`;
+            const g = document.getElementById('chG'), freqs = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25];
+            if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            for(let i=0; i<8; i++) {
+                let p = document.createElement('div'); p.className = 'sound-pad';
+                p.onmousedown = () => {
+                    let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+                    osc.type = 'sine'; osc.frequency.value = freqs[i % freqs.length];
+                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
+                    osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 1.5);
+                };
+                g.appendChild(p);
+            }
+        }
+
+        /* --- 7. COSMIC GRAVITY --- */
+        function loadOrbit() {
+            arena.innerHTML = `<canvas id="obC" width="500" height="500" style="background:#09090d;"></canvas><div style="position:absolute; bottom:15px; color:#fff;">Click to Toggle Orbit Capture</div>`;
+            const c = document.getElementById('obC'), ctx = c.getContext('2d');
+            let ang = 0, rad = 120, captured = true;
+            c.onclick = () => captured = !captured;
+            function loop() {
+                ctx.clearRect(0,0,500,500);
+                ctx.beginPath(); ctx.arc(250,250,30,0,Math.PI*2); ctx.fillStyle='#ffb74d'; ctx.fill(); // Star
+                if(captured) ang += 0.03; else rad += 4;
+                let px = 250 + Math.cos(ang)*rad, py = 250 + Math.sin(ang)*rad;
+                ctx.beginPath(); ctx.arc(px,py,10,0,Math.PI*2); ctx.fillStyle='#80cbc4'; ctx.fill(); // Planet
+                if(rad > 300) { rad = 120; captured = true; }
                 currentLoop = requestAnimationFrame(loop);
             }
             loop();
         }
 
-        // --- GAME 2: ANCHOR CLICKER ---
-        function loadClicker() {
-            let anchors = 0, gps = 0, upgradeCost = 15;
-            arena.innerHTML = `
-                <div class="clicker-ui">
-                    <div style="font-size:1.5rem;">Gold Anchors: <span id="ancCount">0</span></div>
-                    <div style="font-size:0.9rem; color:#aaa;"><span id="gpsCount">0</span>/sec</div>
-                    <div class="big-anchor" id="anchorBtn">⚓</div>
-                    <button class="upgrade-btn" id="upgBtn">Buy Crew (Cost: 15)</button>
-                </div>`;
-            
-            const btn = document.getElementById('anchorBtn');
-            const count = document.getElementById('ancCount');
-            const gpsDisp = document.getElementById('gpsCount');
-            const upg = document.getElementById('upgBtn');
-
-            btn.onclick = () => { anchors++; count.innerText = anchors; };
-            upg.onclick = () => {
-                if(anchors >= upgradeCost) {
-                    anchors -= upgradeCost;
-                    gps += 1;
-                    upgradeCost = Math.floor(upgradeCost * 1.5);
-                    count.innerText = anchors;
-                    gpsDisp.innerText = gps;
-                    upg.innerText = `Buy Crew (Cost: ${upgradeCost})`;
-                }
-            };
-            function runGps() {
-                anchors += gps;
-                count.innerText = anchors;
-                setTimeout(runGps, 1000);
-            }
-            runGps();
+        /* --- 8. BREATHE BOX --- */
+        function loadBreath() {
+            arena.innerHTML = `<div class="breath-circle"></div><div style="position:absolute; bottom:40px; color:#fff; font-size:1.5rem;">Breathe In... Breathe Out...</div>`;
         }
 
-        // --- GAME 3: REFLEX GRID ---
-        function loadReflex() {
-            arena.innerHTML = `<div class="reflex-score">Score: <span id="refScore">0</span></div><div class="reflex-grid" id="rGrid"></div>`;
-            const grid = document.getElementById('rGrid');
-            const scoreDisp = document.getElementById('refScore');
-            let score = 0, activeIndex = -1;
+        /* --- 9. STAR COLLECTOR --- */
+        function loadStars() {
+            arena.innerHTML = `<canvas id="stC" width="600" height="400" style="background:#0d0d16;"></canvas>`;
+            const c = document.getElementById('stC'), ctx = c.getContext('2d');
+            let stars = [], bx = 300;
+            c.onmousemove = (e) => { const r = c.getBoundingClientRect(); bx = e.clientX - r.left; };
+            function step() {
+                ctx.clearRect(0,0,600,400);
+                if(Math.random()<0.05) stars.push({x:Math.random()*600, y:0});
+                ctx.fillStyle = '#ffeb3b';
+                stars.forEach((s,i)=>{
+                    s.y += 2; ctx.fillRect(s.x, s.y, 6, 6);
+                    if(s.y > 370 && Math.abs(s.x - bx) < 40) stars.splice(i,1);
+                    else if(s.y > 400) stars.splice(i,1);
+                });
+                ctx.fillStyle = '#b39ddb'; ctx.fillRect(bx-40, 380, 80, 15); // Basket
+                currentLoop = requestAnimationFrame(step);
+            }
+            step();
+        }
 
-            for(let i=0; i<9; i++) {
-                let box = document.createElement('div');
-                box.className = 'reflex-box';
-                box.dataset.index = i;
+        /* --- 10. RUNE MATCHING --- */
+        function loadMemory() {
+            arena.innerHTML = `<div class="sound-grid" id="mmG"></div>`;
+            const g = document.getElementById('mmG'), icons = ['🌙','🌙','⭐','⭐','🌸','🌸','🔮','🔮'], shuf = icons.sort(()=>Math.random()-0.5);
+            let open = [];
+            for(let i=0; i<8; i++) {
+                let box = document.createElement('div'); box.className='sound-pad'; box.style.fontSize='1.8rem'; box.style.display='flex'; box.style.alignItems='center'; box.style.justifyContent='center';
                 box.onclick = () => {
-                    if(parseInt(box.dataset.index) === activeIndex) {
-                        score++; scoreDisp.innerText = score; triggerNext();
+                    if(open.length < 2 && !box.innerText) {
+                        box.innerText = shuf[i]; open.push(box);
+                        if(open.length === 2) {
+                            if(open[0].innerText !== open[1].innerText) {
+                                setTimeout(()=>{ open[0].innerText=''; open[1].innerText=''; open=[]; }, 800);
+                            } else { open = []; }
+                        }
                     }
                 };
-                grid.appendChild(box);
+                g.appendChild(box);
             }
-
-            function triggerNext() {
-                const boxes = document.querySelectorAll('.reflex-box');
-                boxes.forEach(b => b.style.backgroundColor = '#222');
-                let next = Math.floor(Math.random() * 9);
-                while(next === activeIndex) { next = Math.floor(Math.random() * 9); }
-                activeIndex = next;
-                boxes[activeIndex].style.backgroundColor = '#ff3366';
-            }
-            triggerNext();
         }
 
-        // --- GAME 4: SAND PHYSICS SANDBOX ---
-        function loadSandbox() {
-            arena.innerHTML = `<canvas id="sandCanvas" width="500" height="500" style="background:#000;"></canvas><div style="position:absolute; bottom:15px; color:#888; font-size:0.8rem;">Click & Drag to drop sand</div>`;
-            const canvas = document.getElementById('sandCanvas');
-            const ctx = canvas.getContext('2d');
-            
-            const width = 125, height = 125, size = 4;
-            let grid = Array(width).fill().map(() => Array(height).fill(0));
-            let isDrawing = false, mouseX = 0, mouseY = 0;
-
-            canvas.onmousedown = () => isDrawing = true;
-            window.onmouseup = () => isDrawing = false;
-            canvas.onmousemove = (e) => {
-                const r = canvas.getBoundingClientRect();
-                mouseX = Math.floor((e.clientX - r.left) / size);
-                mouseY = Math.floor((e.clientY - r.top) / size);
+        /* --- 11. TINT MATCHER --- */
+        function loadTint() {
+            arena.innerHTML = `<div style="text-align:center;color:#fff;display:flex;flex-direction:column;gap:15px;"><h3>Match target mix backdrop</h3><input type="range" id="tR" min="0" max="255"><div id="tBox" style="width:200px;height:100px;border-radius:12px;margin:auto;"></div></div>`;
+            const r = document.getElementById('tR'), box = document.getElementById('tBox'), target = 140;
+            box.style.background = `rgb(100, ${target}, 200)`;
+            r.oninput = () => {
+                if(Math.abs(r.value - target) < 10) box.style.background = '#80cbc4';
             };
+        }
 
-            function sandLoop() {
-                if (isDrawing && mouseX >= 0 && mouseX < width && mouseY >= 0 && mouseY < height) {
-                    for(let xOffset=-1; xOffset<=1; xOffset++) {
-                        let nx = mouseX + xOffset;
-                        if(nx >= 0 && nx < width && Math.random() > 0.3) grid[nx][mouseY] = 1;
-                    }
-                }
-
-                // Physics update (bottom-to-top execution avoids single-frame warp drops)
-                let nextGrid = Array(width).fill().map(() => Array(height).fill(0));
-                for(let y = height - 1; y >= 0; y--) {
-                    for(let x = 0; x < width; x++) {
-                        if (grid[x][y] === 1) {
-                            if (y + 1 < height && grid[x][y+1] === 0 && nextGrid[x][y+1] === 0) {
-                                nextGrid[x][y+1] = 1; // Fall down
-                            } else {
-                                let leftEmpty = (x - 1 >= 0 && grid[x-1][y+1] === 0 && nextGrid[x-1][y+1] === 0);
-                                let rightEmpty = (x + 1 < width && grid[x+1][y+1] === 0 && nextGrid[x+1][y+1] === 0);
-                                if (leftEmpty && rightEmpty) {
-                                    let dir = Math.random() < 0.5 ? -1 : 1;
-                                    nextGrid[x+dir][y+1] = 1;
-                                } else if (leftEmpty) { nextGrid[x-1][y+1] = 1; }
-                                else if (rightEmpty) { nextGrid[x+1][y+1] = 1; }
-                                else { nextGrid[x][y] = 1; } // Stay
-                            }
-                        }
-                    }
-                }
-                grid = nextGrid;
-
-                // Render Frame
-                ctx.clearRect(0,0,canvas.width,canvas.height);
-                for(let x=0; x<width; x++) {
-                    for(let y=0; y<height; y++) {
-                        if(grid[x][y] === 1) {
-                            ctx.fillStyle = `hsl(${(x+y)%360}, 80%, 60%)`;
-                            ctx.fillRect(x*size, y*size, size, size);
-                        }
-                    }
-                }
-                currentLoop = requestAnimationFrame(sandLoop);
+        /* --- 12. TOWER ALIGNMENT --- */
+        function loadStack() {
+            arena.innerHTML = `<canvas id="skC" width="400" height="400" style="background:#0f111a;"></canvas>`;
+            const c = document.getElementById('skC'), ctx = c.getContext('2d');
+            let layers = [{x:150, w:100}], speed = 3, curX = 0, dir = 1;
+            c.onclick = () => {
+                let last = layers[layers.length-1];
+                layers.push({x: curX, w: 100}); curX = 0;
+                if(layers.length > 8) layers.shift();
+            };
+            function loop() {
+                ctx.clearRect(0,0,400,400); curX += speed * dir;
+                if(curX > 300 || curX < 0) dir *= -1;
+                ctx.fillStyle = '#ff8a80'; ctx.fillRect(curX, 400 - (layers.length * 30), 100, 25);
+                ctx.fillStyle = '#b39ddb';
+                layers.forEach((l, i) => ctx.fillRect(l.x, 400 - (i * 30) - 30, l.w, 25));
+                currentLoop = requestAnimationFrame(loop);
             }
-            sandLoop();
+            loop();
+        }
+
+        /* --- 13. LEAF TYPER --- */
+        function loadText() {
+            arena.innerHTML = `<div style="color:#fff;text-align:center;"><h2 id="txW" style="font-size:3rem;letter-spacing:2px;color:#80deea;">breeze</h2><p style="margin-top:10px;color:#666;">Type the word cleanly to rotate terms</p></div>`;
+            const words = ['calm', 'ocean', 'river', 'forest', 'ether', 'balance'], wordEl = document.getElementById('txW');
+            window.onkeypress = (e) => {
+                if(e.key === wordEl.innerText[0]) {
+                    wordEl.innerText = wordEl.innerText.substring(1);
+                    if(wordEl.innerText === "") wordEl.innerText = words[Math.floor(Math.random()*words.length)];
+                }
+            };
+        }
+
+        /* --- 14. GRID PATHFINDER --- */
+        function loadMaze() {
+            arena.innerHTML = `<canvas id="mzC" width="400" height="400" style="background:#0b0c10;"></canvas>`;
+            const c = document.getElementById('mzC'), ctx = c.getContext('2d');
+            let px = 0, py = 0, target = {x:7, y:7};
+            const grid = [
+                [0,0,1,0,0,0,0,0],
+                [0,1,1,0,1,1,1,0],
+                [0,0,0,0,1,0,0,0],
+                [1,1,1,0,1,0,1,1],
+                [0,0,0,0,0,0,1,0],
+                [0,1,1,1,1,0,1,0],
+                [0,0,0,0,1,0,0,0],
+                [1,1,1,0,0,0,1,0]
+            ];
+            window.onkeydown = (e) => {
+                let nx = px, ny = py;
+                if(e.key === 'ArrowUp') ny--; if(e.key === 'ArrowDown') ny++;
+                if(e.key === 'ArrowLeft') nx--; if(e.key === 'ArrowRight') nx++;
+                if(nx>=0 && nx<8 && ny>=0 && ny<8 && grid[ny][nx]===0) { px=nx; py=ny; draw(); }
+            };
+            function draw() {
+                ctx.clearRect(0,0,400,400);
+                for(let r=0; r<8; r++) for(let col=0; col<8; col++) {
+                    if(grid[r][col]===1) { ctx.fillStyle='#1f2330'; ctx.fillRect(col*50, r*50, 48, 48); }
+                }
+                ctx.fillStyle = '#ff80ab'; ctx.fillRect(target.x*50+10, target.y*50+10, 30, 30);
+                ctx.fillStyle = '#80cbc4'; ctx.fillRect(px*50+10, py*50+10, 30, 30);
+            }
+            draw();
         }
     </script>
 </body>
