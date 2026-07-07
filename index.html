@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AnchorPoint Groundz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #121214;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        header {
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: #00ffcc;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 255, 204, 0.5);
+        }
+        p {
+            color: #8a8a93;
+            font-size: 0.9rem;
+        }
+        #gameContainer {
+            position: relative;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #333;
+        }
+        canvas {
+            display: block;
+            background-color: #1a1a1e;
+            cursor: none; /* Hides default mouse cursor over the game */
+        }
+        #ui {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            pointer-events: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            background: rgba(0,0,0,0.5);
+            padding: 10px 15px;
+            border-radius: 5px;
+            border-left: 4px solid #00ffcc;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>AnchorPoint Groundz</h1>
+        <p>Move your mouse to navigate. Absorb the dots to grow larger!</p>
+    </header>
+
+    <div id="gameContainer">
+        <div id="ui">Score: <span id="scoreVal">0</span></div>
+        <canvas id="gameCanvas" width="800" height="600"></canvas>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreVal = document.getElementById('scoreVal');
+
+        // Game Variables
+        let score = 0;
+        let gameOver = false;
+
+        // Player properties
+        const player = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            radius: 15,
+            color: '#00ffcc',
+            speed: 0.08 // How smoothly it follows the mouse
+        };
+
+        // Mouse position tracking
+        const mouse = {
+            x: canvas.width / 2,
+            y: canvas.height / 2
+        };
+
+        // Food array
+        const foods = [];
+        const maxFood = 40;
+
+        // Track mouse movement relative to canvas
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            mouse.x = e.clientX - rect.left;
+            mouse.y = e.clientY - rect.top;
+        });
+
+        // Generate food at random positions
+        function spawnFood() {
+            return {
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                radius: Math.random() * 4 + 3,
+                color: `hsl(${Math.random() * 360}, 100%, 60%)`
+            };
+        }
+
+        // Populate initial food
+        for (let i = 0; i < maxFood; i++) {
+            foods.push(spawnFood());
+        }
+
+        // Distance formula to check for collisions
+        function getDistance(x1, y1, x2, y2) {
+            return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+        }
+
+        // Main Game Loop
+        function gameLoop() {
+            // 1. Clear the canvas for the new frame
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 2. Draw Grid Background (gives a standard .io feel)
+            ctx.strokeStyle = '#232329';
+            ctx.lineWidth = 1;
+            const gridSize = 40;
+            for (let x = 0; x < canvas.width; x += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            for (let y = 0; y < canvas.height; y += gridSize) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+
+            // 3. Move Player smoothly toward mouse position
+            player.x += (mouse.x - player.x) * player.speed;
+            player.y += (mouse.y - player.y) * player.speed;
+
+            // Keep player inside canvas boundaries
+            if (player.x < player.radius) player.x = player.radius;
+            if (player.x > canvas.width - player.radius) player.x = canvas.width - player.radius;
+            if (player.y < player.radius) player.y = player.radius;
+            if (player.y > canvas.height - player.radius) player.y = canvas.height - player.radius;
+
+            // 4. Draw and manage Food
+            for (let i = foods.length - 1; i >= 0; i--) {
+                const food = foods[i];
+                
+                // Draw food dot
+                ctx.beginPath();
+                ctx.arc(food.x, food.y, food.radius, 0, Math.PI * 2);
+                ctx.fillStyle = food.color;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = food.color;
+                ctx.fill();
+                ctx.shadowBlur = 0; // Reset shadow for next drawings
+
+                // Collision detection between Player and Food
+                const dist = getDistance(player.x, player.y, food.x, food.y);
+                if (dist < player.radius + food.radius) {
+                    // Eat food
+                    foods.splice(i, 1);
+                    score += 10;
+                    scoreVal.textContent = score;
+                    
+                    // Grow player slightly, up to a limit
+                    if (player.radius < 60) {
+                        player.radius += 0.5;
+                    }
+
+                    // Replace eaten food
+                    foods.push(spawnFood());
+                }
+            }
+
+            // 5. Draw Player
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+            ctx.fillStyle = player.color;
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = player.color;
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Draw inner core for player styling
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, player.radius * 0.4, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+
+            // Run loop recursively
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start the game
+        gameLoop();
+    </script>
+</body>
+</html>
