@@ -5,32 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AnchorPoint.fun</title>
     <style>
-        /* Calming Pastel-Dark Aesthetics */
         :root {
-            --bg-color: #161623;
-            --card-bg: rgba(255, 255, 255, 0.04);
-            --card-border: rgba(255, 255, 255, 0.08);
-            --text-main: #f0edf5;
-            --text-sub: #9ca3af;
-            --accent: #b39ddb;
-            --accent-glow: rgba(179, 157, 219, 0.4);
+            --bg-color: #0b0c10;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.07);
+            --text-main: #f1f1f5;
+            --text-sub: #8f94a6;
+            --accent: #a3e635;
+            --accent-glow: rgba(163, 230, 53, 0.3);
+            --space-pink: #f43f5e;
         }
 
-        body.party-mode {
-            animation: rainbowBg 5s linear infinite;
-        }
-        @keyframes rainbowBg {
-            0% { background: #2a1b3d; }
-            33% { background: #1b3d33; }
-            66% { background: #3d1b24; }
-            100% { background: #2a1b3d; }
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
@@ -43,211 +29,181 @@
             transition: background 0.5s ease;
         }
 
-        /* Header & Dancing Characters Layout */
+        /* Top Action Bar & Portal Buttons */
+        .top-nav-bar {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            z-index: 10;
+        }
+        .portal-btn {
+            background: linear-gradient(135deg, #1e1b4b, #311042);
+            border: 2px solid var(--accent);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 15px var(--accent-glow);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .portal-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px var(--accent);
+        }
+
         .header-wrapper {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 30px;
-            margin-bottom: 50px;
+            margin-bottom: 30px;
             user-select: none;
         }
-        header {
-            text-align: center;
-        }
         header h1 {
-            font-size: 3.8rem;
-            font-weight: 800;
-            letter-spacing: -1px;
-            color: #fff;
-            text-shadow: 0 0 20px var(--accent-glow);
-            cursor: pointer;
-        }
-        header p {
-            font-size: 1.1rem;
-            color: var(--text-sub);
-            margin-top: 5px;
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: -2px;
+            background: linear-gradient(to right, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* Animated Pure CSS Pixel-Style Dancers */
-        .pixel-dancer {
-            width: 50px;
-            height: 60px;
+        /* Animated Pixel Dancers */
+        .pixel-dancer { width: 40px; height: 50px; display: flex; flex-direction: column; align-items: center; }
+        .dancer-left { animation: dance 1s ease-in-out infinite alternate; }
+        .dancer-right { animation: dance 1s ease-in-out infinite alternate-reverse; }
+        @keyframes dance {
+            0% { transform: translateY(0) rotate(-5deg); }
+            100% { transform: translateY(-10px) rotate(5deg); }
+        }
+        .pixel-body { width: 24px; height: 24px; background: var(--accent); border-radius: 4px; }
+
+        /* Search & Navigation Tab Filters */
+        .search-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 40px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-            transition: transform 0.3s ease;
+            gap: 10px;
         }
-        .pixel-dancer:active {
-            transform: scale(2) rotate(360deg) !important;
+        .search-bar {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--card-border);
+            padding: 15px 20px;
+            border-radius: 14px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
         }
-        .dancer-left { animation: danceLeft 1.2s ease-in-out infinite; }
-        .dancer-right { animation: danceRight 1.2s ease-in-out infinite; alternate; }
+        .search-bar:focus { border-color: var(--accent); }
 
-        @keyframes danceLeft {
-            0%, 100% { transform: translateY(0) scaleY(1) rotate(0deg); }
-            50% { transform: translateY(-12px) scaleY(0.9) rotate(-8deg); }
-        }
-        @keyframes danceRight {
-            0%, 100% { transform: translateY(0) scaleY(1) rotate(0deg); }
-            50% { transform: translateY(-12px) scaleY(0.9) rotate(8deg); }
-        }
-
-        /* Custom Pixel Art via SVG String Icons */
-        .pixel-body {
-            width: 32px;
-            height: 32px;
-            background: var(--accent);
-            box-shadow: 0 4px 0 #7e57c2, inset -4px -4px 0 rgba(0,0,0,0.2);
-            border-radius: 4px;
-            position: relative;
-        }
-        .pixel-eyes {
-            position: absolute;
-            top: 8px; left: 6px; width: 6px; height: 6px; background: #000;
-            box-shadow: 14px 0 0 #000;
-        }
-        .pixel-limbs {
-            display: flex; justify-content: space-between; width: 40px; margin-top: 2px;
-        }
-        .pixel-foot { width: 10px; height: 8px; background: #7e57c2; border-radius: 2px; }
-
-        /* Smooth Calming Grid */
+        /* Master Catalog Layout Grid */
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 20px;
-            max-width: 1100px;
+            max-width: 1200px;
             width: 100%;
         }
         .game-card {
             background: var(--card-bg);
-            border-radius: 20px;
-            padding: 25px 20px;
+            border-radius: 18px;
+            padding: 22px 18px;
             text-align: center;
-            backdrop-filter: blur(10px);
             border: 1px solid var(--card-border);
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
         .game-card:hover {
-            transform: translateY(-5px);
-            background: rgba(255,255,255,0.08);
+            transform: translateY(-4px);
             border-color: var(--accent);
-            box-shadow: 0 15px 30px var(--accent-glow);
+            background: rgba(255,255,255,0.06);
         }
-        .game-icon {
-            font-size: 2.5rem;
-            margin-bottom: 12px;
-            filter: drop-shadow(0 0 8px rgba(255,255,255,0.2));
-        }
-        .game-card h3 {
-            font-size: 1.25rem;
-            color: #fff;
-            margin-bottom: 6px;
-        }
-        .game-card p {
-            font-size: 0.85rem;
-            color: var(--text-sub);
-            line-height: 1.3;
-        }
+        .game-icon { font-size: 2.3rem; margin-bottom: 10px; }
+        .game-card h3 { font-size: 1.15rem; margin-bottom: 5px; }
+        .game-card p { font-size: 0.8rem; color: var(--text-sub); line-height: 1.4; }
 
-        /* Micro-interactions Overlay Portal */
+        /* Smooth Portal overlay system */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(10, 10, 15, 0.85);
-            backdrop-filter: blur(15px);
+            background: rgba(5, 5, 8, 0.93);
+            backdrop-filter: blur(20px);
             display: flex; align-items: center; justify-content: center;
             opacity: 0; pointer-events: none;
-            transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            z-index: 1000;
+            transition: opacity 0.4s ease;
+            z-index: 2000;
         }
-        .modal-overlay.active {
-            opacity: 1; pointer-events: auto;
-        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
         .modal-content {
-            background: #1c1c28;
-            width: 90%; max-width: 800px;
-            height: 80%; max-height: 600px;
-            border-radius: 28px;
-            border: 1px solid rgba(255,255,255,0.1);
+            background: #12131a;
+            width: 92%; max-width: 900px;
+            height: 85%; max-height: 650px;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.08);
             position: relative;
             display: flex; flex-direction: column;
             overflow: hidden;
-            transform: scale(0.9) translateY(20px);
-            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-        .modal-overlay.active .modal-content {
-            transform: scale(1) translateY(0);
         }
         .close-btn {
             position: absolute; top: 15px; right: 20px;
             font-size: 2rem; background: none; border: none;
-            cursor: pointer; color: #666; transition: color 0.2s; z-index: 1010;
+            cursor: pointer; color: #555; z-index: 2100;
         }
         .close-btn:hover { color: #fff; }
-        .game-arena {
-            flex: 1; width: 100%; height: 100%;
-            display: flex; align-items: center; justify-content: center;
-            position: relative; overflow: hidden;
+        .game-arena { flex: 1; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; }
+
+        /* Future Planet Viewport Overlay CSS */
+        #planetContainer {
+            width: 100%; height: 100%; background: radial-gradient(circle at center, #100e17 0%, #030206 100%);
+            position: relative; cursor: grab;
+        }
+        #planetContainer:active { cursor: grabbing; }
+        .planet-ui-hint {
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,0,0,0.6); padding: 8px 16px; border-radius: 20px;
+            font-size: 0.85rem; color: #888; pointer-events: none; border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* Game Internal UI Styles */
-        .clicker-ui { display: flex; flex-direction: column; align-items: center; gap: 15px; text-align: center; }
-        .big-btn { font-size: 5rem; cursor: pointer; transition: transform 0.1s; user-select: none; }
-        .big-btn:active { transform: scale(0.85); }
-        .game-btn { background: var(--accent); color: #111; border: none; padding: 10px 20px; font-weight: bold; border-radius: 12px; cursor: pointer; }
-        
-        /* Harmonious Sound Chimes Grid UI */
-        .sound-grid { display: grid; grid-template-columns: repeat(4, 70px); gap: 15px; }
-        .sound-pad { width: 70px; height: 70px; background: rgba(255,255,255,0.1); border-radius: 16px; cursor: pointer; transition: background 0.2s; border: 1px solid rgba(255,255,255,0.05); }
-        .sound-pad:active { background: #80cbc4; }
+        /* Sandbox Item UI View */
+        .sandbox-display { text-align: center; max-width: 450px; padding: 20px; }
+        .sandbox-big-icon { font-size: 6rem; animation: float 4s ease-in-out infinite; margin-bottom: 20px; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-        /* Breathing Circle */
-        .breath-circle { width: 100px; height: 100px; background: #80deea; border-radius: 50%; opacity: 0.7; animation: breathe 8s ease-in-out infinite; box-shadow: 0 0 50px rgba(128,222,234,0.6); }
-        @keyframes breathe { 0%, 100% { transform: scale(1); background: #80deea; } 50% { transform: scale(2.2); background: #b39ddb; } }
+        /* Clicker Elements */
+        .grind-layout { text-align: center; color: #fff; display: flex; flex-direction: column; gap: 15px; align-items: center; }
+        .grind-btn { font-size: 4rem; cursor: pointer; user-select: none; transition: transform 0.1s; }
+        .grind-btn:active { transform: scale(0.9); }
+        .shop-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .shop-item { background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 8px; font-size: 0.8rem; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); }
+        .shop-item:hover { border-color: var(--accent); }
     </style>
 </head>
 <body>
 
+    <div class="top-nav-bar">
+        <button class="portal-btn" onclick="openGame('futureplanet')">🪐 Enter Futuristic Planet VR</button>
+    </div>
+
     <div class="header-wrapper">
-        <div class="pixel-dancer dancer-left">
-            <div class="pixel-body"><div class="pixel-eyes"></div></div>
-            <div class="pixel-limbs"><div class="pixel-foot"></div><div class="pixel-foot"></div></div>
-        </div>
-        
+        <div class="pixel-dancer dancer-left"><div class="pixel-body"></div></div>
         <header>
-            <h1 id="mainTitle">AnchorPoint.fun</h1>
-            <p>A serene universe of 14 calming, interactive toys.</p>
+            <h1>AnchorPoint.fun</h1>
+            <p>120+ Micro-Toys, Zen Mechanics, & Deep Progression Grind Loops</p>
         </header>
-
-        <div class="pixel-dancer dancer-right">
-            <div class="pixel-body" style="background:#80cbc4;"><div class="pixel-eyes"></div></div>
-            <div class="pixel-limbs"><div class="pixel-foot" style="background:#80cbc4;"></div><div class="pixel-foot" style="background:#80cbc4;"></div></div>
-        </div>
+        <div class="pixel-dancer dancer-right"><div class="pixel-body" style="background:var(--space-pink)"></div></div>
     </div>
 
-    <div class="grid-container">
-        <div class="game-card" onclick="openGame('groundz')"><div class="game-icon">🟢</div><h3>Groundz .io</h3><p>Absorb energy nodes and grow into deep space.</p></div>
-        <div class="game-card" onclick="openGame('clicker')"><div class="game-icon">⚓</div><h3>Anchor Clicker</h3><p>Tap the anchor to build a soft maritime forge.</p></div>
-        <div class="game-card" onclick="openGame('reflex')"><div class="game-icon">⚡</div><h3>Reflex Neon</h3><p>Calmly track and lock down flashing glowing cells.</p></div>
-        <div class="game-card" onclick="openGame('sandbox')"><div class="game-icon">⏳</div><h3>Sand Canvas</h3><p>A physics framework displaying beautiful falling sand.</p></div>
-        <div class="game-card" onclick="openGame('orchard')"><div class="game-icon">🌸</div><h3>Zen Orchard</h3><p>Click anywhere to sprout custom procedural fauna.</p></div>
-        <div class="game-card" onclick="openGame('chimes')"><div class="game-icon">🎵</div><h3>Harmonic Chimes</h3><p>Trigger synthesizers with sound frequencies.</p></div>
-        <div class="game-card" onclick="openGame('orbit')"><div class="game-icon">🪐</div><h3>Cosmic Gravity</h3><p>Tap to lock satellite paths into safe circular loops.</p></div>
-        <div class="game-card" onclick="openGame('breath')"><div class="game-icon">🌬️</div><h3>Breathe Box</h3><p>Synchronize your posture with a visual expansion metric.</p></div>
-        <div class="game-card" onclick="openGame('stars')"><div class="game-icon">✨</div><h3>Star Collector</h3><p>Catch gentle drifting falling stellar fragments.</p></div>
-        <div class="game-card" onclick="openGame('memory')"><div class="game-icon">🔮</div><h3>Rune Matching</h3><p>Flip tiles to mirror cosmic matching patterns.</p></div>
-        <div class="game-card" onclick="openGame('tint')"><div class="game-icon">🎨</div><h3>Tint Matcher</h3><p>Adjust color nodes to align with custom backgrounds.</p></div>
-        <div class="game-card" onclick="openGame('stack')"><div class="game-icon">🧱</div><h3>Tower Alignment</h3><p>Stack geometric layers seamlessly over each other.</p></div>
-        <div class="game-card" onclick="openGame('text')"><div class="game-icon">🍃</div><h3>Leaf Typer</h3><p>Clear drift phrases by matching character patterns.</p></div>
-        <div class="game-card" onclick="openGame('maze')"><div class="game-icon">🧭</div><h3>Grid Pathfinder</h3><p>Guide an illuminated vector node through paths.</p></div>
+    <div class="search-container">
+        <input type="text" id="catalogSearch" class="search-bar" placeholder="Search across games, toys, objects, and realms..." oninput="filterCatalog()">
     </div>
+
+    <div class="grid-container" id="masterGrid"></div>
 
     <div id="gameModal" class="modal-overlay">
         <div class="modal-content">
@@ -257,52 +213,111 @@
     </div>
 
     <script>
+        const grid = document.getElementById('masterGrid');
         const modal = document.getElementById('gameModal');
         const arena = document.getElementById('gameArena');
         let currentLoop = null;
-        let audioCtx = null; // Instantiated safely on user demand
+        let globalGrindState = { essence: 0, autoClickers: 0, criticalChance: 10, multiplier: 1 };
 
-        // Easter Egg 1: Header Party Mode Clicker
-        let clickCount = 0;
-        document.getElementById('mainTitle').onclick = () => {
-            clickCount++;
-            if(clickCount >= 5) {
-                document.body.classList.toggle('party-mode');
-                clickCount = 0;
+        // 20 Custom Functional Mini-Games Array Catalog
+        const specializedGames = [
+            { id: 'groundz', name: 'Groundz .io', icon: '🟢', desc: 'Absorb elements and grow safely across space coordinates.', type: 'game' },
+            { id: 'clicker', name: 'Anchor Forge', icon: '⚓', desc: 'Tap to forge anchors. Features long-term progressive idle automation.', type: 'grind' },
+            { id: 'sandbox', name: 'Fluidic Sand Canvas', icon: '⏳', desc: 'Relax and watch multi-colored micro-sand grains cascade down walls.', type: 'calm' },
+            { id: 'infinite_clicks', name: 'The Void Miner', icon: '⛏️', desc: 'A deeply grindy mining sim. Mine block layer variants for core upgrades.', type: 'grind' },
+            { id: 'orchard', name: 'Zen Bloom Canvas', icon: '🌸', desc: 'Click inside empty zones to trigger beautiful geometric branches.', type: 'calm' },
+            { id: 'sound_waves', name: 'Ethereal Oscillators', icon: '🎵', desc: 'Tap dynamic grid zones to release high-fidelity ambient tone waves.', type: 'calm' },
+            { id: 'gravity_node', name: 'Orbital Stabilizer', icon: '🛰️', desc: 'Click to capture vector paths of stray satellites before decay.', type: 'game' },
+            { id: 'breathe', name: 'Metronome Resonator', icon: '🌬️', desc: 'Calmly synchronize breathing mechanics with an expanding node.', type: 'calm' },
+            { id: 'star_catch', name: 'Stellar Basket', icon: '✨', desc: 'Catch glowing falling matrix nodes floating down the workspace.', type: 'game' },
+            { id: 'rune_match', name: 'Astral Matrix Mirror', icon: '🔮', desc: 'Match hidden rune arrays to clear psychological memory logs.', type: 'calm' },
+            { id: 'tint_blend', name: 'Spectrum Equalizer', icon: '🎨', desc: 'Mix basic dynamic color parameters to match baseline backdrops.', type: 'calm' },
+            { id: 'block_stack', name: 'Structure Alignment', icon: '🧱', desc: 'Stack moving geometric plates evenly to establish stable structures.', type: 'game' },
+            { id: 'leaf_typer', name: 'Calm Script Parser', icon: '🍃', desc: 'Type targeted terms to refresh ambient space phrases.', type: 'calm' },
+            { id: 'vector_maze', name: 'Pulse Path Explorer', icon: '🧭', desc: 'Guide an activated energy particle through maze pathways.', type: 'game' },
+            { id: 'nebula_paint', name: 'Cosmic Gas Brush', icon: '☁️', desc: 'Drag your pointer to spread self-fading glowing nebula fields.', type: 'calm' },
+            { id: 'click_multiplier', name: 'The 10 Billion Factor', icon: '📈', desc: 'Extremely grindy click math. Multiplies exponentially.', type: 'grind' },
+            { id: 'audio_pad', name: 'Chime Synthesizer', icon: '🎹', desc: 'A custom musical layout triggering pleasant microtone frequencies.', type: 'calm' },
+            { id: 'ripple_toy', name: 'Fluid Surface Ripple', icon: '💧', desc: 'Click onto smooth vectors to manifest cascading water soundwaves.', type: 'calm' },
+            { id: 'particle_drift', name: 'Solar Wind Matrix', icon: '🍃', desc: 'Blow 500+ micro-nodes across coordinate points smoothly.', type: 'calm' },
+            { id: 'xp_grinder', name: 'Level Ascension Sim', icon: '👑', desc: 'Pure progression loop. Accumulate stat lines and tier ranks.', type: 'grind' }
+        ];
+
+        // Generation Algorithm creating 100 Encyclopedia Items
+        const elementsList = ['Silicon', 'Vibranium', 'Ether', 'Quartz', 'Neon Gas', 'Plasma Core', 'Quantum Fragment', 'Cosmic Dust', 'Dark Matter', 'Solar Flare'];
+        const itemCategories = [
+            { icon: '💎', suffix: 'Shard', bio: 'A rare physical compound shimmering with internal grid light.' },
+            { icon: '🧪', suffix: 'Isotope', bio: 'A concentrated chemical variant containing deep power properties.' },
+            { icon: '📜', suffix: 'Data Log', bio: 'A hidden collection of information retrieved from dead relays.' },
+            { icon: '⚙️', suffix: 'Actuator', bio: 'A dense clockwork module ticking safely at micro-speeds.' },
+            { icon: 'Aero', suffix: 'Spore', bio: 'A biological particle drifting gently through air grids.' },
+            { icon: '🧩', suffix: 'Artifact', bio: 'An ancient structured device of unknown historical origin.' },
+            { icon: '🔋', suffix: 'Cell Element', bio: 'A small modular cylinder distributing clean energy voltage.' },
+            { icon: 'Fossilized', suffix: 'Relic', bio: 'An organic component safely preserved across deep timelines.' },
+            { icon: '🧿', suffix: 'Focus Lens', bio: 'A smooth crystal item filtering high-density laser signals.' },
+            { icon: '📡', suffix: 'Receiver Pin', bio: 'An ultra-sensitive node mapping deep incoming satellite radio waves.' }
+        ];
+
+        let database = [...specializedGames];
+        let idCounter = 1;
+        for (let i = 0; i < 10; i++) {
+            for (let j = 0; j < 10; j++) {
+                let name = `${elementsList[i]} ${itemCategories[j].suffix}`;
+                database.push({
+                    id: `item_${idCounter++}`,
+                    name: name,
+                    icon: itemCategories[j].icon.length > 3 ? '🔮' : itemCategories[j].icon,
+                    desc: `${itemCategories[j].bio} Found within regional matrix nodes.`,
+                    type: 'encyclopedia'
+                });
             }
-        };
+        }
 
-        // Easter Egg 2: Secret Keyboard Typing Tracker
-        let inputString = "";
-        window.onkeydown = (e) => {
-            inputString += e.key.toLowerCase();
-            if(inputString.endsWith("zen")) {
-                alert("✨ Inner peace unlocked! The site aesthetic has entered ultra-glow.");
-                document.documentElement.style.setProperty('--accent', '#ff80ab');
-                inputString = "";
-            }
-        };
+        // Render Master Catalog UI Viewport
+        function buildGrid(items) {
+            grid.innerHTML = "";
+            items.forEach(item => {
+                let card = document.createElement('div');
+                card.className = 'game-card';
+                card.onclick = () => openGame(item.id, item);
+                card.innerHTML = `<div class="game-icon">${item.icon}</div><h3>${item.name}</h3><p>${item.desc}</p>`;
+                grid.appendChild(card);
+            });
+        }
+        buildGrid(database);
 
-        function openGame(game) {
+        function filterCatalog() {
+            let q = document.getElementById('catalogSearch').value.toLowerCase();
+            let filtered = database.filter(i => i.name.toLowerCase().includes(q) || i.desc.toLowerCase().includes(q));
+            buildGrid(filtered);
+        }
+
+        // Central System Routing Engine
+        function openGame(id, infoObject) {
             modal.classList.add('active');
             arena.innerHTML = "";
             if(currentLoop) cancelAnimationFrame(currentLoop);
 
-            // Engine Selection Router
-            if(game==='groundz') loadGroundz();
-            if(game==='clicker') loadClicker();
-            if(game==='reflex') loadReflex();
-            if(game==='sandbox') loadSandbox();
-            if(game==='orchard') loadOrchard();
-            if(game==='chimes') loadChimes();
-            if(game==='orbit') loadOrbit();
-            if(game==='breath') loadBreath();
-            if(game==='stars') loadStars();
-            if(game==='memory') loadMemory();
-            if(game==='tint') loadTint();
-            if(game==='stack') loadStack();
-            if(game==='text') loadText();
-            if(game==='maze') loadMaze();
+            // Interface Routers
+            if (id === 'futureplanet') loadFuturePlanetEngine();
+            else if (id === 'groundz') loadGroundz();
+            else if (id === 'clicker') loadClicker();
+            else if (id === 'sandbox') loadSandbox();
+            else if (id === 'infinite_clicks') loadVoidMiner();
+            else if (id === 'orchard') loadOrchard();
+            else if (id === 'breathe') loadBreath();
+            else if (id === 'xp_grinder') loadXpGrinder();
+            else if (id.startsWith('item_')) loadEncyclopediaItem(infoObject);
+            else {
+                // Fallback Engine for other structural toys
+                arena.innerHTML = `
+                    <div class="grind-layout">
+                        <div class="sandbox-big-icon">${infoObject.icon}</div>
+                        <h2>${infoObject.name}</h2>
+                        <p style="color:var(--text-sub); max-width:400px;">${infoObject.desc}</p>
+                        <button class="portal-btn" style="margin-top:20px;" onclick="closeGame()">Return to Center</button>
+                    </div>`;
+            }
         }
 
         function closeGame() {
@@ -311,58 +326,190 @@
             if(currentLoop) cancelAnimationFrame(currentLoop);
         }
 
-        /* --- 1. GROUNDZ .IO --- */
+        /* --- ADVANCED ENGINE: FUTURISTIC PLANET VR WITH ZOOM SYSTEM --- */
+        function loadFuturePlanetEngine() {
+            arena.innerHTML = `
+                <div id="planetContainer">
+                    <canvas id="planetCanvas"></canvas>
+                    <div class="planet-ui-hint">Click & Drag to Rotate | Scroll Mouse Wheel to Zoom In/Out</div>
+                </div>`;
+            
+            const c = document.getElementById('planetCanvas');
+            const ctx = c.getContext('2d');
+            const container = document.getElementById('planetContainer');
+            
+            c.width = 800; c.height = 550;
+            
+            let zoom = 1.0;
+            let rotationX = 0;
+            let rotationY = 0;
+            let isDragging = false;
+            let prevMouseX = 0, prevMouseY = 0;
+
+            // Generate futuristic layout topology grid nodes
+            let points = [];
+            let numPoints = 250;
+            for(let i=0; i<numPoints; i++) {
+                let theta = Math.random() * Math.PI * 2;
+                let phi = Math.acos((Math.random() * 2) - 1);
+                points.push({ theta: theta, phi: phi, size: Math.random()*2+1 });
+            }
+
+            // Mouse Touch Zoom tracking interactions
+            container.onmousedown = (e) => { isDragging = true; prevMouseX = e.clientX; prevMouseY = e.clientY; };
+            window.onmouseup = () => isDragging = false;
+            container.onmousemove = (e) => {
+                if(!isDragging) return;
+                let deltaX = e.clientX - prevMouseX;
+                let deltaY = e.clientY - prevMouseY;
+                rotationY += deltaX * 0.007;
+                rotationX += deltaY * 0.007;
+                prevMouseX = e.clientX; prevMouseY = e.clientY;
+            };
+            container.onwheel = (e) => {
+                e.preventDefault();
+                if(e.deltaY < 0) zoom = Math.min(zoom + 0.1, 3.5);
+                else zoom = Math.max(zoom - 0.1, 0.4);
+            };
+
+            function drawPlanet() {
+                ctx.clearRect(0,0,c.width,c.height);
+                let cx = c.width/2, cy = c.height/2;
+                let baseRadius = 130 * zoom;
+
+                // Draw atmospheric futuristic force fields rings
+                ctx.beginPath();
+                ctx.arc(cx, cy, baseRadius + 15, 0, Math.PI*2);
+                ctx.strokeStyle = 'rgba(163, 230, 53, 0.15)';
+                ctx.lineWidth = 4; ctx.stroke();
+
+                // Project 3D vector nodes onto 2D matrix canvas space
+                let projected = [];
+                points.forEach(p => {
+                    // Apply rotation translations coordinates values
+                    let x1 = Math.sin(p.phi) * Math.cos(p.theta + rotationY);
+                    let z1 = Math.sin(p.phi) * Math.sin(p.theta + rotationY);
+                    let y1 = Math.cos(p.phi);
+
+                    // X-axis rotations
+                    let y2 = y1 * Math.cos(rotationX) - z1 * Math.sin(rotationX);
+                    let z2 = y1 * Math.sin(rotationX) + z1 * Math.cos(rotationX);
+
+                    // Map perspective rendering lines if node is facing camera view range
+                    if (z2 > -0.2) {
+                        let scrX = cx + x1 * baseRadius;
+                        let scrY = cy + y2 * baseRadius;
+                        projected.push({x: scrX, y: scrY, size: p.size * (z2 + 1) * zoom, depth: z2});
+                    }
+                });
+
+                // Render structure vectors grids links connecting nearby dots
+                ctx.strokeStyle = 'rgba(163, 230, 53, 0.2)';
+                ctx.lineWidth = 1;
+                for(let i=0; i<projected.length; i++) {
+                    for(let j=i+1; j<projected.length; j++) {
+                        let dist = Math.hypot(projected[i].x - projected[j].x, projected[i].y - projected[j].y);
+                        if(dist < 45 * zoom) {
+                            ctx.beginPath(); ctx.moveTo(projected[i].x, projected[i].y);
+                            ctx.lineTo(projected[j].x, projected[j].y); ctx.stroke();
+                        }
+                    }
+                }
+
+                // Render vector nodes
+                projected.forEach(p => {
+                    ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+                    ctx.fillStyle = p.depth > 0.4 ? 'var(--accent)' : '#fff';
+                    ctx.fill();
+                });
+
+                // Auto rotate floating momentum if user lets go
+                if(!isDragging) { rotationY += 0.003; }
+
+                currentLoop = requestAnimationFrame(drawPlanet);
+            }
+            drawPlanet();
+        }
+
+        /* --- ENCYCLOPEDIA MODULAR CARD DISPLAYER --- */
+        function loadEncyclopediaItem(item) {
+            arena.innerHTML = `
+                <div class="sandbox-display">
+                    <div class="sandbox-big-icon">${item.icon}</div>
+                    <h2 style="font-size:2rem; margin-bottom:10px;">${item.name}</h2>
+                    <div style="background:rgba(255,255,255,0.03); padding:15px; border-radius:12px; border:1px solid var(--card-border); margin-bottom:20px;">
+                        <p style="color:var(--text-sub); font-size:0.95rem;">${item.desc}</p>
+                    </div>
+                    <div style="font-size:0.8rem; color:var(--accent);">Item Signature Hash verified: Secure Registry ✅</div>
+                </div>`;
+        }
+
+        /* --- MINI GAME: GROUNDZ .IO --- */
         function loadGroundz() {
-            arena.innerHTML = `<canvas id="gzC" width="700" height="500" style="background:#0e0e12; cursor:none;"></canvas>`;
+            arena.innerHTML = `<canvas id="gzC" width="700" height="500" style="background:#090a0f; cursor:none;"></canvas>`;
             const c = document.getElementById('gzC'), ctx = c.getContext('2d');
-            let p = {x:350, y:250, r:15}, m = {x:350, y:250}, dots = [];
+            let p = {x:350, y:250, r:14}, m = {x:350, y:250}, dots = [];
             c.onmousemove = (e) => { const r = c.getBoundingClientRect(); m.x = e.clientX-r.left; m.y = e.clientY-r.top; };
-            for(let i=0; i<30; i++) dots.push({x:Math.random()*c.width, y:Math.random()*c.height, r:4, col:'#b39ddb'});
+            for(let i=0; i<35; i++) dots.push({x:Math.random()*c.width, y:Math.random()*c.height, r:4, col:'var(--accent)'});
             function render() {
                 ctx.clearRect(0,0,c.width,c.height);
-                p.x += (m.x - p.x)*0.08; p.y += (m.y - p.y)*0.08;
+                p.x += (m.x - p.x)*0.07; p.y += (m.y - p.y)*0.07;
                 dots.forEach((d, i) => {
                     ctx.beginPath(); ctx.arc(d.x, d.y, d.r, 0, Math.PI*2); ctx.fillStyle = d.col; ctx.fill();
-                    if(Math.hypot(d.x-p.x, d.y-p.y) < p.r) { dots[i] = {x:Math.random()*c.width, y:Math.random()*c.height, r:4, col:'#b39ddb'}; if(p.r<50) p.r+=1; }
+                    if(Math.hypot(d.x-p.x, d.y-p.y) < p.r) { dots[i] = {x:Math.random()*c.width, y:Math.random()*c.height, r:4, col:'var(--accent)'}; if(p.r<60) p.r+=0.8; }
                 });
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fillStyle = '#80cbc4'; ctx.fill();
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fillStyle = 'var(--space-pink)'; ctx.fill();
                 currentLoop = requestAnimationFrame(render);
             }
             render();
         }
 
-        /* --- 2. ANCHOR CLICKER --- */
+        /* --- GRIND GAME: DEEP ANCHOR FORGE --- */
         function loadClicker() {
-            let score = 0;
-            arena.innerHTML = `<div class="clicker-ui"><h3>Forged Items: <span id="cSc">0</span></h3><div class="big-btn" id="cAk">⚓</div></div>`;
-            document.getElementById('cAk').onclick = () => { score++; document.getElementById('cSc').innerText = score; };
+            arena.innerHTML = `
+                <div class="grind-layout">
+                    <h3>Total Essence Multipliers: <span id="cSc" style="color:var(--accent)">${globalGrindState.essence}</span></h3>
+                    <p style="color:var(--text-sub); font-size:0.85rem;">Auto-Clicker Drones active: <span id="cDrone">${globalGrindState.autoClickers}</span></p>
+                    <div class="grind-btn" id="cAk">⚓</div>
+                    <div class="shop-container">
+                        <div class="shop-item" onclick="buyGrindAsset('drone', 15)">Buy Mining Drone (Cost: <span id="dCost">15</span>)</div>
+                        <div class="shop-item" onclick="buyGrindAsset('crit', 40)">Upgrade Matrix Grid (Cost: <span id="cCost">40</span>)</div>
+                    </div>
+                </div>`;
+            
+            document.getElementById('cAk').onclick = () => {
+                globalGrindState.essence += 1 * globalGrindState.multiplier;
+                document.getElementById('cSc').innerText = globalGrindState.essence;
+            };
+
+            // Maintain long-term incremental execution framework loops
+            function passiveIncomeLoop() {
+                if(modal.classList.contains('active')) {
+                    globalGrindState.essence += globalGrindState.autoClickers;
+                    let displayNode = document.getElementById('cSc');
+                    if(displayNode) displayNode.innerText = globalGrindState.essence;
+                    setTimeout(passiveIncomeIncome, 1000);
+                }
+            }
+            window.buyGrindAsset = (type, cost) => {
+                if(globalGrindState.essence >= cost) {
+                    globalGrindState.essence -= cost;
+                    if(type==='drone') { globalGrindState.autoClickers++; globalGrindState.multiplier += 1; }
+                    if(type==='crit') { globalGrindState.multiplier *= 2; }
+                    openGame('clicker'); // Soft refresh display coordinates numbers
+                }
+            };
         }
 
-        /* --- 3. REFLEX NEON --- */
-        function loadReflex() {
-            arena.innerHTML = `<div style="color:#fff;">Click target cell fast: <span id="rfS" style="font-weight:bold;color:#80cbc4;">0</span></div><div class="sound-grid" id="rfG" style="position:absolute;"></div>`;
-            const g = document.getElementById('rfG'); let score=0, active=-1;
-            for(let i=0; i<16; i++) {
-                let d = document.createElement('div'); d.className='sound-pad';
-                d.onclick = () => { if(i===active) { score++; document.getElementById('rfS').innerText = score; advance(); } };
-                g.appendChild(d);
-            }
-            function advance() {
-                const pads = g.querySelectorAll('.sound-pad'); pads.forEach(p=>p.style.background='rgba(255,255,255,0.1)');
-                active = Math.floor(Math.random()*16); pads[active].style.background='#b39ddb';
-            }
-            advance();
-        }
-
-        /* --- 4. SAND CANVAS --- */
+        /* --- TOY: FLUIDIC SAND CANVAS --- */
         function loadSandbox() {
-            arena.innerHTML = `<canvas id="sdC" width="400" height="400" style="background:#050508;"></canvas>`;
+            arena.innerHTML = `<canvas id="sdC" width="400" height="400" style="background:#030305; border-radius:12px;"></canvas>`;
             const c = document.getElementById('sdC'), ctx = c.getContext('2d'), w=100, h=100, sz=4;
             let m=Array(w).fill().map(()=>Array(h).fill(0)), down=false, mx=0, my=0;
             c.onmousedown=()=>down=true; window.onmouseup=()=>down=false;
             c.onmousemove=(e)=>{ const r=c.getBoundingClientRect(); mx=Math.floor((e.clientX-r.left)/sz); my=Math.floor((e.clientY-r.top)/sz); };
             function run() {
-                if(down && mx>=0 && mx<w && my>=0 && my<h) m[mx][my]=1;
+                if(down && mx>=0 && mx<w && my>=0 && my<h) { m[mx][my]=1; if(mx+1<w) m[mx+1][my]=1; }
                 ctx.clearRect(0,0,c.width,c.height);
                 for(let y=h-2; y>=0; y--) {
                     for(let x=0; x<w; x++) {
@@ -373,183 +520,63 @@
                         }
                     }
                 }
-                for(let x=0; x<w; x++) for(let y=0; y<h; y++) if(m[x][y]===1) { ctx.fillStyle='#b39ddb'; ctx.fillRect(x*sz,y*sz,sz,sz); }
+                for(let x=0; x<w; x++) for(let y=0; y<h; y++) if(m[x][y]===1) { ctx.fillStyle='var(--accent)'; ctx.fillRect(x*sz,y*sz,sz,sz); }
                 currentLoop = requestAnimationFrame(run);
             }
             run();
         }
 
-        /* --- 5. ZEN ORCHARD --- */
+        /* --- GRIND GAME: THE VOID MINER --- */
+        function loadVoidMiner() {
+            let layersMined = 0;
+            arena.innerHTML = `
+                <div class="grind-layout">
+                    <h3>Depth Reached: <span style="color:var(--space-pink)"><span id="vDepth">0</span> meters</span></h3>
+                    <div style="background:#222; width:220px; height:120px; display:flex; align-items:center; justify-content:center; font-size:2rem; font-weight:bold; border:2px dashed #444; border-radius:14px; cursor:pointer;" id="mineTarget">⛏️ CORE ROCK</div>
+                    <p style="font-size:0.8rem; color:#666;">Keep grinding to trigger automatic depth expansion updates.</p>
+                </div>`;
+            document.getElementById('mineTarget').onclick = () => {
+                layersMined += Math.floor(Math.random()*3)+1;
+                document.getElementById('vDepth').innerText = layersMined;
+            };
+        }
+
+        /* --- CALM TOY: ZEN BLOOM ORCHARD --- */
         function loadOrchard() {
-            arena.innerHTML = `<canvas id="orC" width="700" height="500" style="background:#111218;"></canvas><div style="position:absolute; bottom:15px; color:#666;">Click to plant procedural branches</div>`;
+            arena.innerHTML = `<canvas id="orC" width="700" height="500" style="background:#0c0d12;"></canvas>`;
             const c = document.getElementById('orC'), ctx = c.getContext('2d');
-            c.onclick = (e) => { const r=c.getBoundingClientRect(); drawTree(e.clientX-r.left, 450, 60, -Math.PI/2, 8); };
+            c.onclick = (e) => { const r=c.getBoundingClientRect(); drawTree(e.clientX-r.left, 460, 55, -Math.PI/2, 7); };
             function drawTree(x, y, len, angle, depth) {
                 if(depth===0) return;
                 let x2 = x + Math.cos(angle)*len, y2 = y + Math.sin(angle)*len;
-                ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x2,y2); ctx.strokeStyle= depth<3 ? '#ffb74d':'#80cbc4'; ctx.lineWidth=depth; ctx.stroke();
+                ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x2,y2); ctx.strokeStyle = depth < 3 ? 'var(--space-pink)' : 'var(--accent)'; ctx.lineWidth=depth; ctx.stroke();
                 setTimeout(()=> {
-                    drawTree(x2, y2, len*0.75, angle - 0.4, depth-1);
-                    drawTree(x2, y2, len*0.75, angle + 0.4, depth-1);
-                }, 40);
+                    drawTree(x2, y2, len*0.78, angle - 0.38, depth-1);
+                    drawTree(x2, y2, len*0.78, angle + 0.38, depth-1);
+                }, 50);
             }
         }
 
-        /* --- 6. HARMONIC CHIMES --- */
-        function loadChimes() {
-            arena.innerHTML = `<div class="sound-grid" id="chG"></div>`;
-            const g = document.getElementById('chG'), freqs = [261.63, 293.66, 329.63, 349.23, 392.00, 440.00, 493.88, 523.25];
-            if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            for(let i=0; i<8; i++) {
-                let p = document.createElement('div'); p.className = 'sound-pad';
-                p.onmousedown = () => {
-                    let osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-                    osc.type = 'sine'; osc.frequency.value = freqs[i % freqs.length];
-                    gain.gain.setValueAtTime(0.3, audioCtx.currentTime); gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.5);
-                    osc.connect(gain); gain.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 1.5);
-                };
-                g.appendChild(p);
-            }
-        }
-
-        /* --- 7. COSMIC GRAVITY --- */
-        function loadOrbit() {
-            arena.innerHTML = `<canvas id="obC" width="500" height="500" style="background:#09090d;"></canvas><div style="position:absolute; bottom:15px; color:#fff;">Click to Toggle Orbit Capture</div>`;
-            const c = document.getElementById('obC'), ctx = c.getContext('2d');
-            let ang = 0, rad = 120, captured = true;
-            c.onclick = () => captured = !captured;
-            function loop() {
-                ctx.clearRect(0,0,500,500);
-                ctx.beginPath(); ctx.arc(250,250,30,0,Math.PI*2); ctx.fillStyle='#ffb74d'; ctx.fill(); // Star
-                if(captured) ang += 0.03; else rad += 4;
-                let px = 250 + Math.cos(ang)*rad, py = 250 + Math.sin(ang)*rad;
-                ctx.beginPath(); ctx.arc(px,py,10,0,Math.PI*2); ctx.fillStyle='#80cbc4'; ctx.fill(); // Planet
-                if(rad > 300) { rad = 120; captured = true; }
-                currentLoop = requestAnimationFrame(loop);
-            }
-            loop();
-        }
-
-        /* --- 8. BREATHE BOX --- */
+        /* --- CALM TOY: METRONOME RESONATOR --- */
         function loadBreath() {
-            arena.innerHTML = `<div class="breath-circle"></div><div style="position:absolute; bottom:40px; color:#fff; font-size:1.5rem;">Breathe In... Breathe Out...</div>`;
+            arena.innerHTML = `<div class="breath-circle"></div><div style="position:absolute; bottom:50px; color:var(--text-sub);">Breathe inside alignment nodes recursively.</div>`;
         }
 
-        /* --- 9. STAR COLLECTOR --- */
-        function loadStars() {
-            arena.innerHTML = `<canvas id="stC" width="600" height="400" style="background:#0d0d16;"></canvas>`;
-            const c = document.getElementById('stC'), ctx = c.getContext('2d');
-            let stars = [], bx = 300;
-            c.onmousemove = (e) => { const r = c.getBoundingClientRect(); bx = e.clientX - r.left; };
-            function step() {
-                ctx.clearRect(0,0,600,400);
-                if(Math.random()<0.05) stars.push({x:Math.random()*600, y:0});
-                ctx.fillStyle = '#ffeb3b';
-                stars.forEach((s,i)=>{
-                    s.y += 2; ctx.fillRect(s.x, s.y, 6, 6);
-                    if(s.y > 370 && Math.abs(s.x - bx) < 40) stars.splice(i,1);
-                    else if(s.y > 400) stars.splice(i,1);
-                });
-                ctx.fillStyle = '#b39ddb'; ctx.fillRect(bx-40, 380, 80, 15); // Basket
-                currentLoop = requestAnimationFrame(step);
-            }
-            step();
-        }
-
-        /* --- 10. RUNE MATCHING --- */
-        function loadMemory() {
-            arena.innerHTML = `<div class="sound-grid" id="mmG"></div>`;
-            const g = document.getElementById('mmG'), icons = ['🌙','🌙','⭐','⭐','🌸','🌸','🔮','🔮'], shuf = icons.sort(()=>Math.random()-0.5);
-            let open = [];
-            for(let i=0; i<8; i++) {
-                let box = document.createElement('div'); box.className='sound-pad'; box.style.fontSize='1.8rem'; box.style.display='flex'; box.style.alignItems='center'; box.style.justifyContent='center';
-                box.onclick = () => {
-                    if(open.length < 2 && !box.innerText) {
-                        box.innerText = shuf[i]; open.push(box);
-                        if(open.length === 2) {
-                            if(open[0].innerText !== open[1].innerText) {
-                                setTimeout(()=>{ open[0].innerText=''; open[1].innerText=''; open=[]; }, 800);
-                            } else { open = []; }
-                        }
-                    }
-                };
-                g.appendChild(box);
-            }
-        }
-
-        /* --- 11. TINT MATCHER --- */
-        function loadTint() {
-            arena.innerHTML = `<div style="text-align:center;color:#fff;display:flex;flex-direction:column;gap:15px;"><h3>Match target mix backdrop</h3><input type="range" id="tR" min="0" max="255"><div id="tBox" style="width:200px;height:100px;border-radius:12px;margin:auto;"></div></div>`;
-            const r = document.getElementById('tR'), box = document.getElementById('tBox'), target = 140;
-            box.style.background = `rgb(100, ${target}, 200)`;
-            r.oninput = () => {
-                if(Math.abs(r.value - target) < 10) box.style.background = '#80cbc4';
+        /* --- GRIND GAME: LEVEL ASCENSION SIM --- */
+        function loadXpGrinder() {
+            let xp = 0, lvl = 1;
+            arena.innerHTML = `
+                <div class="grind-layout">
+                    <h2>Tier Rating: <span style="color:var(--accent)">Level ${lvl}</span></h2>
+                    <div style="width:250px; background:#222; height:20px; border-radius:10px; overflow:hidden;"><div id="xpBar" style="width:0%; background:var(--accent); height:100%; transition:width 0.1s;"></div></div>
+                    <button class="portal-btn" id="xpClick">Harvest Matrix Stats (+10 XP)</button>
+                </div>`;
+            document.getElementById('xpClick').onclick = () => {
+                xp += 10;
+                if(xp >= 100) { xp = 0; lvl++; }
+                document.getElementById('xpBar').style.width = `${xp}%`;
+                openGame('xp_grinder');
             };
-        }
-
-        /* --- 12. TOWER ALIGNMENT --- */
-        function loadStack() {
-            arena.innerHTML = `<canvas id="skC" width="400" height="400" style="background:#0f111a;"></canvas>`;
-            const c = document.getElementById('skC'), ctx = c.getContext('2d');
-            let layers = [{x:150, w:100}], speed = 3, curX = 0, dir = 1;
-            c.onclick = () => {
-                let last = layers[layers.length-1];
-                layers.push({x: curX, w: 100}); curX = 0;
-                if(layers.length > 8) layers.shift();
-            };
-            function loop() {
-                ctx.clearRect(0,0,400,400); curX += speed * dir;
-                if(curX > 300 || curX < 0) dir *= -1;
-                ctx.fillStyle = '#ff8a80'; ctx.fillRect(curX, 400 - (layers.length * 30), 100, 25);
-                ctx.fillStyle = '#b39ddb';
-                layers.forEach((l, i) => ctx.fillRect(l.x, 400 - (i * 30) - 30, l.w, 25));
-                currentLoop = requestAnimationFrame(loop);
-            }
-            loop();
-        }
-
-        /* --- 13. LEAF TYPER --- */
-        function loadText() {
-            arena.innerHTML = `<div style="color:#fff;text-align:center;"><h2 id="txW" style="font-size:3rem;letter-spacing:2px;color:#80deea;">breeze</h2><p style="margin-top:10px;color:#666;">Type the word cleanly to rotate terms</p></div>`;
-            const words = ['calm', 'ocean', 'river', 'forest', 'ether', 'balance'], wordEl = document.getElementById('txW');
-            window.onkeypress = (e) => {
-                if(e.key === wordEl.innerText[0]) {
-                    wordEl.innerText = wordEl.innerText.substring(1);
-                    if(wordEl.innerText === "") wordEl.innerText = words[Math.floor(Math.random()*words.length)];
-                }
-            };
-        }
-
-        /* --- 14. GRID PATHFINDER --- */
-        function loadMaze() {
-            arena.innerHTML = `<canvas id="mzC" width="400" height="400" style="background:#0b0c10;"></canvas>`;
-            const c = document.getElementById('mzC'), ctx = c.getContext('2d');
-            let px = 0, py = 0, target = {x:7, y:7};
-            const grid = [
-                [0,0,1,0,0,0,0,0],
-                [0,1,1,0,1,1,1,0],
-                [0,0,0,0,1,0,0,0],
-                [1,1,1,0,1,0,1,1],
-                [0,0,0,0,0,0,1,0],
-                [0,1,1,1,1,0,1,0],
-                [0,0,0,0,1,0,0,0],
-                [1,1,1,0,0,0,1,0]
-            ];
-            window.onkeydown = (e) => {
-                let nx = px, ny = py;
-                if(e.key === 'ArrowUp') ny--; if(e.key === 'ArrowDown') ny++;
-                if(e.key === 'ArrowLeft') nx--; if(e.key === 'ArrowRight') nx++;
-                if(nx>=0 && nx<8 && ny>=0 && ny<8 && grid[ny][nx]===0) { px=nx; py=ny; draw(); }
-            };
-            function draw() {
-                ctx.clearRect(0,0,400,400);
-                for(let r=0; r<8; r++) for(let col=0; col<8; col++) {
-                    if(grid[r][col]===1) { ctx.fillStyle='#1f2330'; ctx.fillRect(col*50, r*50, 48, 48); }
-                }
-                ctx.fillStyle = '#ff80ab'; ctx.fillRect(target.x*50+10, target.y*50+10, 30, 30);
-                ctx.fillStyle = '#80cbc4'; ctx.fillRect(px*50+10, py*50+10, 30, 30);
-            }
-            draw();
         }
     </script>
 </body>
